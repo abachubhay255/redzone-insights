@@ -1,0 +1,7 @@
+dist
+node_modules
+*.js
+**/jest.config.ts
+mjsResolver.cjs
+.eslintrc.cjs
+vite.config.ts

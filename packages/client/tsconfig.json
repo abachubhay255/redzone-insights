@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.settings.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "outDir": "./dist",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "#s/*": ["./src/*"]
+    },
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "moduleResolution": "Node"
+  },
+  "include": ["src/**/*.*ts*", "src/**/*.json"],
+  "references": [
+    {
+      "path": "../server"
+    }
+  ],
+  "ts-node": {
+    "esm": true
+  }
+}

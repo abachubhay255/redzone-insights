@@ -1,0 +1,52 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "type": "module",
+  "nodemonConfig": {
+    "verbose": true,
+    "ignore": [],
+    "watch": [
+      "dist"
+    ],
+    "ext": "js",
+    "exec": "node --inspect=5859 --conditions=development ./dist/index.js",
+    "signal": "SIGKILL",
+    "delay": 50
+  },
+  "imports": {
+    "#s/*": {
+      "development": "./dist/*",
+      "default": "./*"
+    },
+    "#s": {
+      "development": "./dist",
+      "default": "./"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "yarn run nodemon &  yarn run watch",
+    "nba-api": "python ./nba-api/run.py",
+    "nodemon": "nodemon",
+    "nodemon2": "ts-node index",
+    "watch": "tsc -w"
+  },
+  "author": "Akhil Bachubhay",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.19.2",
+    "graphql": "^16.9.0",
+    "graphql-http": "^1.22.1",
+    "ruru": "^2.0.0-beta.13"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/graphql": "^14.5.0",
+    "@types/node": "^20.14.10",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  }
+}

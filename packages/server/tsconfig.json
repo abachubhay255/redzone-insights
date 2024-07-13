@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.settings.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "#s/*": ["./src/*"]
+    },
+    "lib": ["ESNext"],
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true
+  },
+  "include": ["src/**/*.*ts*", "src/**/*.json"],
+  "ts-node": {
+    "esm": true
+  }
+}

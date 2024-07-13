@@ -1,23 +1,17 @@
 import express from "express";
-import { buildSchema } from "graphql";
 import { createHandler } from "graphql-http/lib/use/express";
 import { ruruHTML } from "ruru/server";
+import cors from "cors";
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { loadSchema } from "@graphql-tools/load";
+import { resolvers } from "./graphql/resolvers/resolvers.js";
 
-// Construct a schema, using GraphQL schema language
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
-// The root provides a resolver function for each API endpoint
-const root = {
-  hello() {
-    return "Hello world!";
-  }
-};
+const schema = await loadSchema("./**/types/*.graphql", {
+  loaders: [new GraphQLFileLoader()]
+});
 
 const app = express();
+app.use(cors());
 
 // Serve the GraphiQL IDE.
 app.get("/playground", (_req, res) => {
@@ -30,7 +24,7 @@ app.all(
   "/graphql",
   createHandler({
     schema: schema,
-    rootValue: root
+    rootValue: resolvers
   })
 );
 

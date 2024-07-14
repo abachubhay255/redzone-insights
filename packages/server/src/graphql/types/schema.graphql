@@ -1,4 +1,19 @@
+scalar Date
+
 type Query {
   hello: String
-  nflSchedule(week: Int!): String
+  nflScoresWeekly(week: Int!, season: Int): [NFLScoresWeekly]
+}
+
+type NFLScoresWeekly {
+  gameId: ID
+  gameEpoch: Date
+  homeKey: String
+  awayKey: String
+  homeId: ID
+  awayId: ID
+  gameStatus: String
+  awayPts: Int
+  homePts: Int
+  gameClock: String
 }

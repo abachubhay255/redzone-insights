@@ -1,7 +1,8 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Express GraphQL Server",
+  "private": true,
   "main": "./dist/index.js",
   "type": "module",
   "nodemonConfig": {
@@ -29,7 +30,6 @@
     "build": "tsc",
     "dev": "yarn run nodemon & yarn run watch",
     "nodemon": "nodemon",
-    "nodemon2": "ts-node index",
     "watch": "tsc -w"
   },
   "author": "Akhil Bachubhay",

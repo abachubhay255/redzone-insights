@@ -1,10 +1,10 @@
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { loadSchema } from "@graphql-tools/load";
+import cors from "cors";
 import express from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { ruruHTML } from "ruru/server";
-import cors from "cors";
-import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
-import { loadSchema } from "@graphql-tools/load";
-import { resolvers } from "#s/graphql/resolvers/resolvers.js";
+import { resolvers } from "./graphql/resolvers/resolvers.js";
 
 const schema = await loadSchema("./**/types/*.graphql", {
   loaders: [new GraphQLFileLoader()]

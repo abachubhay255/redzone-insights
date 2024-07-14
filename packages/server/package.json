@@ -19,11 +19,7 @@
   "imports": {
     "#s/*": {
       "development": "./dist/*",
-      "default": "./*"
-    },
-    "#s": {
-      "development": "./dist",
-      "default": "./"
+      "default": "./src/*"
     }
   },
   "scripts": {

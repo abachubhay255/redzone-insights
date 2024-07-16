@@ -3,6 +3,7 @@ scalar Date
 type Query {
   hello: String
   nflScoresWeekly(week: Int!, season: Int): [NFLScoresWeekly]
+  playerGameLogs(playerId: ID!, games: Int): [PlayerGameLogs]
 }
 
 type NFLScoresWeekly {
@@ -16,4 +17,42 @@ type NFLScoresWeekly {
   awayPts: Int
   homePts: Int
   gameClock: String
+}
+
+type PlayerGameLogs {
+  playerId: ID
+  playerName: String
+  teamId: ID
+  gameId: ID
+  gameDate: Date
+  oppKey: String
+  isHome: Boolean
+  teamKey: String
+  passing: PassingStats
+  rushing: RushingStats
+  receiving: ReceivingStats
+}
+
+type PassingStats {
+  yards: Int
+  touchdowns: Int
+  attempts: Int
+  completions: Int
+  interceptions: Int
+  yardsPerPass: Float
+}
+
+type RushingStats {
+  yards: Int
+  touchdowns: Int
+  carries: Int
+  yardsPerCarry: Float
+}
+
+type ReceivingStats {
+  yards: Int
+  touchdowns: Int
+  receptions: Int
+  targets: Int
+  yardsPerCatch: Float
 }

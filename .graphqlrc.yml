@@ -1,2 +1,2 @@
-schema: "packages/server/src/graphql/types/schema.graphql"
-documents: "packages/server/src/graphql/types/schema.graphql"
+schema: "packages/server/src/graphql/types/*.graphql"
+documents: "packages/server/src/graphql/types/*.graphql"

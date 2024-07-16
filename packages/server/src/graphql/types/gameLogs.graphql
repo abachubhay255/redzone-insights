@@ -1,22 +1,7 @@
 scalar Date
 
 type Query {
-  hello: String
-  nflScoresWeekly(week: Int!, season: Int): [NFLScoresWeekly]
   playerGameLogs(playerId: ID!, games: Int): [PlayerGameLogs]
-}
-
-type NFLScoresWeekly {
-  gameId: ID
-  gameEpoch: Date
-  homeKey: String
-  awayKey: String
-  homeId: ID
-  awayId: ID
-  gameStatus: String
-  awayPts: Int
-  homePts: Int
-  gameClock: String
 }
 
 type PlayerGameLogs {

@@ -1,0 +1,19 @@
+type Query {
+  playersByTeam(teamId: ID!): [Player]
+  playerInfo(playerId: ID, playerName: String): Player
+}
+
+type Player {
+  playerId: ID
+  teamId: ID
+  teamKey: String
+  name: String
+  jersey: Int
+  position: String
+  college: String
+  height: String
+  weight: Int
+  experience: Int
+  picture: String
+  age: Int
+}

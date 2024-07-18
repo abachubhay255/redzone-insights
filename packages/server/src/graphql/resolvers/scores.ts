@@ -1,4 +1,5 @@
 import { getNFL } from "#s/axios.js";
+import { toNum } from "./utils.js";
 
 type ScoresProps = {
   week: number;
@@ -13,14 +14,14 @@ export async function nflScoresWeekly({ week, season }: ScoresProps) {
   return scoresData
     .map((game: any) => ({
       gameId: game.gameID,
-      gameEpoch: new Date(Number(game.gameTime_epoch) * 1000),
+      gameEpoch: new Date(toNum(game.gameTime_epoch) * 1000),
       homeKey: game.home,
       awayKey: game.away,
       homeId: game.teamIDHome,
       awayId: game.teamIDAway,
       gameStatus: game.gameStatus,
-      awayPts: Number(game.awayPts),
-      homePts: Number(game.homePts),
+      awayPts: toNum(game.awayPts),
+      homePts: toNum(game.homePts),
       gameClock: game.gameClock
     }))
     .sort((a, b) => a.gameEpoch.getTime() - b.gameEpoch.getTime());

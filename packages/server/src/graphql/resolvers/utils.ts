@@ -29,3 +29,27 @@ export function parseGameInfo(gameString: string, team: string) {
     isHome
   };
 }
+
+export function toNum(value: string) {
+  return Number(value) || 0;
+}
+
+export function getPlayer(player: any) {
+  if (!player) {
+    throw new Error("Player is undefined");
+  }
+  return {
+    playerId: player.playerID,
+    teamId: player.teamID,
+    teamKey: player.team,
+    name: player.cbsLongName,
+    jersey: toNum(player.jerseyNum),
+    position: player.pos,
+    college: player.school,
+    height: player.height,
+    weight: toNum(player.weight),
+    experience: toNum(player.exp),
+    picture: player.espnHeadshot,
+    age: toNum(player.age)
+  };
+}

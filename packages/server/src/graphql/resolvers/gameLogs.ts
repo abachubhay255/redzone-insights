@@ -1,5 +1,5 @@
 import { getNFL } from "#s/axios.js";
-import { parseGameInfo } from "./utils.js";
+import { parseGameInfo, toNum } from "./utils.js";
 
 type GameLogsProps = {
   playerId: string;
@@ -23,25 +23,25 @@ export async function playerGameLogs({ playerId, games }: GameLogsProps) {
       isHome: isHome,
       teamKey: log.team,
       passing: log.Passing && {
-        yards: Number(log.Passing.passYds),
-        touchdowns: Number(log.Passing.passTD),
-        attempts: Number(log.Passing.passAttempts),
-        completions: Number(log.Passing.passCompletions),
-        interceptions: Number(log.Passing.int),
-        yardsPerPass: Number(log.Passing.passAvg)
+        yards: toNum(log.Passing.passYds),
+        touchdowns: toNum(log.Passing.passTD),
+        attempts: toNum(log.Passing.passAttempts),
+        completions: toNum(log.Passing.passCompletions),
+        interceptions: toNum(log.Passing.int),
+        yardsPerPass: toNum(log.Passing.passAvg)
       },
       rushing: log.Rushing && {
-        yards: Number(log.Rushing.rushYds),
-        touchdowns: Number(log.Rushing.rushTD),
-        carries: Number(log.Rushing.carries),
-        yardsPerCarry: Number(log.Rushing.rushAvg)
+        yards: toNum(log.Rushing.rushYds),
+        touchdowns: toNum(log.Rushing.rushTD),
+        carries: toNum(log.Rushing.carries),
+        yardsPerCarry: toNum(log.Rushing.rushAvg)
       },
       receiving: log.Receiving && {
-        yards: Number(log.Receiving.recYds),
-        touchdowns: Number(log.Receiving.recTD),
-        receptions: Number(log.Receiving.receptions),
-        targets: Number(log.Receiving.targets),
-        yardsPerCatch: Number(log.Receiving.recAvg)
+        yards: toNum(log.Receiving.recYds),
+        touchdowns: toNum(log.Receiving.recTD),
+        receptions: toNum(log.Receiving.receptions),
+        targets: toNum(log.Receiving.targets),
+        yardsPerCatch: toNum(log.Receiving.recAvg)
       }
     };
   });

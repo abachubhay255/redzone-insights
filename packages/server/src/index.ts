@@ -5,6 +5,9 @@ import express from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { ruruHTML } from "ruru/server";
 import { resolvers } from "./graphql/resolvers/resolvers.js";
+import { createAssistant } from "./openai.js";
+
+export const assistant = await createAssistant();
 
 const schema = await loadSchema("./**/types/*.graphql", {
   loaders: [new GraphQLFileLoader()]

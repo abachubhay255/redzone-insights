@@ -2,7 +2,7 @@ import Axios from "axios";
 import { setupCache } from "axios-cache-interceptor";
 import "dotenv/config";
 
-const TTL = 1000 * 60 * 60; // Cache for 1 hour so I dont call Sports Data IO API too much on free plan
+const TTL = 1000 * 60 * 60; // Cache for 1 hour REMEMBER CACHE CLEARS WHEN SERVER RESTARTS
 
 export const getNFL = setupCache(
   Axios.create({

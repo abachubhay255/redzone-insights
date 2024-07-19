@@ -1,0 +1,129 @@
+[
+  {
+    "playerId": "3916387",
+    "playerName": "Lamar Jackson",
+    "teamId": "3",
+    "gameId": "20240128_KC@BAL",
+    "gameDate": "2024-01-28T05:00:00.000Z",
+    "oppKey": "KC",
+    "isHome": true,
+    "teamKey": "BAL",
+    "passing": {
+      "yards": 272,
+      "touchdowns": 1,
+      "attempts": 37,
+      "completions": 20,
+      "interceptions": 1,
+      "yardsPerPass": 7.4
+    },
+    "rushing": {
+      "yards": 54,
+      "touchdowns": 0,
+      "carries": 8,
+      "yardsPerCarry": 6.8
+    },
+    "receiving": {
+      "yards": 13,
+      "touchdowns": 0,
+      "receptions": 1,
+      "targets": 1,
+      "yardsPerCatch": 13
+    }
+  },
+  {
+    "playerId": "3916387",
+    "playerName": "Lamar Jackson",
+    "teamId": "3",
+    "gameId": "20240120_HOU@BAL",
+    "gameDate": "2024-01-20T05:00:00.000Z",
+    "oppKey": "HOU",
+    "isHome": true,
+    "teamKey": "BAL",
+    "passing": {
+      "yards": 152,
+      "touchdowns": 2,
+      "attempts": 22,
+      "completions": 16,
+      "interceptions": 0,
+      "yardsPerPass": 6.9
+    },
+    "rushing": {
+      "yards": 100,
+      "touchdowns": 2,
+      "carries": 11,
+      "yardsPerCarry": 9.1
+    }
+  },
+  {
+    "playerId": "3916387",
+    "playerName": "Lamar Jackson",
+    "teamId": "3",
+    "gameId": "20231231_MIA@BAL",
+    "gameDate": "2023-12-31T05:00:00.000Z",
+    "oppKey": "MIA",
+    "isHome": true,
+    "teamKey": "BAL",
+    "passing": {
+      "yards": 321,
+      "touchdowns": 5,
+      "attempts": 21,
+      "completions": 18,
+      "interceptions": 0,
+      "yardsPerPass": 15.3
+    },
+    "rushing": {
+      "yards": 35,
+      "touchdowns": 0,
+      "carries": 6,
+      "yardsPerCarry": 5.8
+    }
+  },
+  {
+    "playerId": "3916387",
+    "playerName": "Lamar Jackson",
+    "teamId": "3",
+    "gameId": "20231225_BAL@SF",
+    "gameDate": "2023-12-25T05:00:00.000Z",
+    "oppKey": "SF",
+    "isHome": false,
+    "teamKey": "BAL",
+    "passing": {
+      "yards": 252,
+      "touchdowns": 2,
+      "attempts": 35,
+      "completions": 23,
+      "interceptions": 0,
+      "yardsPerPass": 7.2
+    },
+    "rushing": {
+      "yards": 45,
+      "touchdowns": 0,
+      "carries": 7,
+      "yardsPerCarry": 6.4
+    }
+  },
+  {
+    "playerId": "3916387",
+    "playerName": "Lamar Jackson",
+    "teamId": "3",
+    "gameId": "20231217_BAL@JAX",
+    "gameDate": "2023-12-17T05:00:00.000Z",
+    "oppKey": "JAX",
+    "isHome": false,
+    "teamKey": "BAL",
+    "passing": {
+      "yards": 171,
+      "touchdowns": 1,
+      "attempts": 24,
+      "completions": 14,
+      "interceptions": 1,
+      "yardsPerPass": 7.1
+    },
+    "rushing": {
+      "yards": 97,
+      "touchdowns": 0,
+      "carries": 12,
+      "yardsPerCarry": 8.1
+    }
+  }
+]

@@ -53,3 +53,12 @@ export function getPlayer(player: any) {
     age: toNum(player.age)
   };
 }
+
+export function ToFilename(input: string): string {
+  // Replace invalid characters with underscores
+  return input
+    .replace(/[<>:"\/\\|?*\x00-\x1F]/g, "_")
+    .replace(/\s+/g, "_") // Replace spaces with underscores
+    .replace(/_+/g, "_") // Replace multiple underscores with a single one
+    .trim(); // Remove leading and trailing whitespace
+}

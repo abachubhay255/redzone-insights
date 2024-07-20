@@ -2,6 +2,8 @@ import { sendMessage, uploadFiles } from "#s/openai.js";
 import _ from "lodash";
 import { playerGameLogs } from "./gameLogs.js";
 import { playersByTeam } from "./players.js";
+import testData from "#s/testdata/test.json" assert { type: "json" };
+import { ToFilename } from "./utils.js";
 
 type ProjectionsProps = {
   homeTeamId: string;
@@ -9,29 +11,28 @@ type ProjectionsProps = {
 };
 
 export async function projections({ homeTeamId, awayTeamId }: ProjectionsProps) {
-  const homePlayers = await playersByTeam({ teamId: homeTeamId });
-  const awayPlayers = await playersByTeam({ teamId: awayTeamId });
+  // const homePlayers = await playersByTeam({ teamId: homeTeamId });
+  // const awayPlayers = await playersByTeam({ teamId: awayTeamId });
 
-  const players = [...homePlayers, ...awayPlayers];
+  // const players = [...homePlayers, ...awayPlayers];
 
-  const gameLogs = await Promise.all(players.map(async (player: any) => await playerGameLogs({ playerId: player.playerId, games: 5 })));
+  // const gameLogs = await Promise.all(players.map(async (player: any) => await playerGameLogs({ playerId: player.playerId, games: 5 })));
 
-  const logs = gameLogs.filter(log => log && log.length > 0);
+  // const logs = gameLogs.filter(log => log && log.length > 0);
 
-  const logsByPlayer = _.keyBy(logs, "playerId");
+  // const logsByPlayer = _.keyBy(logs, "playerId");
 
   let objs = [];
-  let ids = [];
-  for (const playerId in logsByPlayer) {
-    const playerLogs = logsByPlayer[playerId];
+  let names = [];
+  for (const playerLogs of testData) {
+    const playerName = playerLogs[0].playerName;
+    const playerId = playerLogs[0].playerId;
+    const str = playerName + "_" + playerId;
     objs.push(playerLogs);
-    ids.push(playerId);
+    names.push(ToFilename(str));
   }
 
-  await uploadFiles(objs, ids);
+  const response = await uploadFiles(objs, names);
 
-  const message = `project the stats of these players ${ids.toString()} in their next game`;
-
-  const response = await sendMessage(message);
   return response;
 }

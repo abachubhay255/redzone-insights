@@ -1,8 +1,7 @@
 import OpenAI from "openai";
 import "dotenv/config";
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fsProm from "fs/promises";
 
 import { assistant } from "./index.js";
 const openai = new OpenAI({
@@ -19,64 +18,65 @@ export async function getVectorStore() {
   return vectorStore;
 }
 
-async function createFileObject(obj: any): Promise<fs.ReadStream> {
-  // Convert the object to a JSON string
-  const jsonString = JSON.stringify(obj, null, 2); // Pretty print with 2-space indentation
-
-  // Get the current module's file URL
-  const __filename = fileURLToPath(import.meta.url);
-
-  // Get the directory name of the current module
-  const __dirname = path.dirname(__filename);
-
-  const serverDir = path.resolve(__dirname, "..");
-
-  // Define the path for the temporary file
-  const filePath = path.join(serverDir, `${obj[0].playerId}.json`);
-
-  console.log("File path:", filePath);
-
-  // Return a Promise that resolves with the read stream
-  return new Promise((resolve, reject) => {
-    // Write the JSON string to a file
-    fs.writeFile(filePath, jsonString, err => {
-      if (err) {
-        reject(new Error("Error writing file: " + err.message));
-        return;
-      }
-
-      console.log("File successfully written!");
-
-      // Create a readable stream
-      const readStream = fs.createReadStream(filePath);
-
-      // Resolve the Promise with the read stream
-      resolve(readStream);
-
-      // Clean up by deleting the file after reading
-      readStream.on("close", () => {
-        fs.unlink(filePath, err => {
-          if (err) {
-            console.error("Error deleting file:", err);
-          } else {
-            console.log("Temporary file deleted.");
-          }
-        });
-      });
-
-      // Handle errors on the read stream
-      readStream.on("error", err => {
-        reject(new Error("Error creating read stream: " + err.message));
-      });
-    });
-  });
+async function createTempJsonFile(obj: any, filename: string): Promise<string> {
+  const tempFilename = `${filename}.json`;
+  await fsProm.writeFile(tempFilename, JSON.stringify(obj));
+  return tempFilename;
 }
 
-export async function uploadFiles(objects: any[], fileIds: string[]) {
-  const fileStreams = await Promise.all(objects.map(createFileObject));
-  console.log("File streams:", fileStreams);
-  const vectorStore = await getVectorStore();
-  await openai.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, { files: fileStreams, fileIds: fileIds });
+export async function uploadFiles(objects: any[], filenames: string[]) {
+  const filePaths: string[] = []; // Array to store temporary file paths
+  let err = "";
+  try {
+    const vectorStore = await getVectorStore();
+
+    const storageFiles = await openai.files.list();
+
+    let filesToUpdate = new Set<string>();
+
+    // if the file is less than 1 day old it doesn't need to be updated, if older than 1 day delete it from the vector store
+    for (const file of storageFiles.data) {
+      if (filesToUpdate.has(file.filename)) {
+        // check if file is older than 1 day
+        if (file.created_at < Date.now() - ONE_DAY_MILLISECONDS) {
+          await openai.files.del(file.id);
+          filesToUpdate.add(file.filename);
+        }
+      }
+    }
+
+    if (filesToUpdate.size === 0) {
+      return "success";
+    }
+
+    // Create temporary JSON files for each object asynchronously
+    for (let i = 0; i < objects.length; i++) {
+      if (!filesToUpdate.has(filenames[i])) {
+        continue;
+      }
+      const tempFilePath = await createTempJsonFile(objects[i], filenames[i]);
+      filePaths.push(tempFilePath);
+    }
+
+    // Create read streams for the temporary files
+    const fileStreams = filePaths.map(path => fs.createReadStream(path));
+
+    // Upload files to OpenAI Vector Store with progress tracking
+    await openai.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, { files: fileStreams, fileIds: [] });
+
+    // Handle the upload response as needed (e.g., process errors)
+  } catch (error) {
+    console.log(error);
+    err = error;
+    // Handle errors appropriately (e.g., clean up temporary files)
+  } finally {
+    // Delete temporary files regardless of success or failure
+    for (const filePath of filePaths) {
+      fs.unlink(filePath, () => {});
+    }
+  }
+
+  return err || "success";
 }
 
 export async function sendMessage(content: string) {
@@ -98,3 +98,5 @@ export async function sendMessage(content: string) {
     }
   }
 }
+
+const ONE_DAY_MILLISECONDS = 1000 * 60 * 60 * 24;

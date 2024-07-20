@@ -9,7 +9,8 @@ export const getNFL = setupCache(
     baseURL: "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/",
     timeout: 5000,
     headers: {
-      "x-rapidapi-key": process.env.NFL_API_KEY,
+      // "x-rapidapi-key": process.env.NFL_API_KEY,
+      "x-rapidapi-key": "",
       "x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
     },
     method: "get"

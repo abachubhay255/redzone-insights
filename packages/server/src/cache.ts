@@ -25,6 +25,12 @@ export const readCache = async (query: string): Promise<any | null> => {
   const cacheKey = getCacheKey(query);
   try {
     const data = await fs.readFile(cacheKey, "utf-8");
+    const lastModified = await fs.stat(cacheKey).then(stat => stat.mtime);
+    const now = new Date();
+    if (now.getTime() - lastModified.getTime() > TTL) {
+      await fs.unlink(cacheKey);
+      return null;
+    }
     return JSON.parse(data);
   } catch (err) {
     return null;
@@ -38,3 +44,5 @@ export const writeCache = async (query: string, result: any): Promise<void> => {
   }
   await fs.writeFile(cacheKey, JSON.stringify(result), "utf-8");
 };
+
+const TTL = 1000 * 60 * 60 * 24; // Cache for 24 hours

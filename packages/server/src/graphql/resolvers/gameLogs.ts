@@ -1,4 +1,4 @@
-import { getNFL } from "#s/axios.js";
+import { getNFLData } from "#s/axios.js";
 import { parseGameInfo, toNum } from "./utils.js";
 
 type GameLogsProps = {
@@ -8,8 +8,8 @@ type GameLogsProps = {
 
 export async function playerGameLogs({ playerId, games }: GameLogsProps) {
   const params = { playerID: playerId, numberOfGames: games };
-  const gameLogs = await getNFL("getNFLGamesForPlayer", { params: params });
-  const gameLogsData = Object.keys(gameLogs.data.body).map(key => gameLogs.data.body[key]);
+  const gameLogs = await getNFLData("getNFLGamesForPlayer", params);
+  const gameLogsData = Object.keys(gameLogs.body).map(key => gameLogs.body[key]);
 
   return gameLogsData.map((log: any) => {
     const { date, oppKey, isHome } = parseGameInfo(log.gameID, log.team);

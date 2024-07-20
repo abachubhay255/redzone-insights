@@ -1,4 +1,4 @@
-import { getNFL } from "#s/axios.js";
+import { getNFLData } from "#s/axios.js";
 import { toNum } from "./utils.js";
 
 type ScoresProps = {
@@ -8,8 +8,8 @@ type ScoresProps = {
 
 export async function nflScoresWeekly({ week, season }: ScoresProps) {
   const params = { gameWeek: week, season: season };
-  const scores = await getNFL("getNFLScoresOnly", { params: params });
-  const scoresData = Object.keys(scores.data.body).map(key => scores.data.body[key]);
+  const scores = await getNFLData("getNFLScoresOnly", params);
+  const scoresData = Object.keys(scores.body).map(key => scores.body[key]);
 
   return scoresData
     .map((game: any) => ({

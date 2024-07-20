@@ -1,22 +1,37 @@
 import Axios from "axios";
-import { setupCache } from "axios-cache-interceptor";
 import "dotenv/config";
+import { readCache, writeCache } from "./cache.js";
 
-const TTL = 1000 * 60 * 60; // Cache for 1 hour REMEMBER CACHE CLEARS WHEN SERVER RESTARTS
+export const getNFL = Axios.create({
+  baseURL: "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/",
+  timeout: 5000,
+  headers: {
+    // "x-rapidapi-key": process.env.NFL_API_KEY,
+    "x-rapidapi-key": "",
+    "x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
+  },
+  method: "get"
+});
 
-export const getNFL = setupCache(
-  Axios.create({
-    baseURL: "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/",
-    timeout: 5000,
-    headers: {
-      // "x-rapidapi-key": process.env.NFL_API_KEY,
-      "x-rapidapi-key": "",
-      "x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
-    },
-    method: "get"
-  }),
-  { ttl: TTL }
-);
+export async function getNFLData(uri: string, params: any) {
+  const query = uri + JSON.stringify(params);
+  const cachedResponse = await readCache(query);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  try {
+    const result = await getNFL(uri, { params: params });
+    console.log("requests remaining this month:", result.headers["x-ratelimit-requests-remaining"]);
+    if (result.data.statusCode === 200) {
+      await writeCache(query, result.data);
+      return result.data;
+    }
+    throw new Error("NFL API Error, status code: " + result.data.statusCode);
+  } catch (error) {
+    console.error(error.message, error.response?.data?.message);
+    throw error;
+  }
+}
 
 // const ODDS_KEY = config.ODDS_API_KEY;
 

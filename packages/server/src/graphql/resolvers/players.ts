@@ -1,4 +1,4 @@
-import { getNFL } from "#s/axios.js";
+import { getNFLData } from "#s/axios.js";
 import { getPlayer } from "./utils.js";
 
 type PlayersByTeamProps = {
@@ -7,8 +7,8 @@ type PlayersByTeamProps = {
 
 export async function playersByTeam({ teamId }: PlayersByTeamProps) {
   const params = { teamID: teamId, getStats: "false" };
-  const resp = await getNFL("getNFLTeamRoster", { params: params });
-  const rosterData = resp.data.body.roster.filter((player: any) => skillPositions.has(player.pos));
+  const resp = await getNFLData("getNFLTeamRoster", params);
+  const rosterData = resp.body.roster.filter((player: any) => skillPositions.has(player.pos));
   return rosterData.map(getPlayer);
 }
 
@@ -24,7 +24,7 @@ export async function playerInfo({ playerId, playerName }: PlayerProps) {
     throw new Error("Must provide playerId or playerName");
   }
   const params = { playerName: playerName, playerID: playerId, getStats: "false" };
-  const resp = await getNFL("getNFLPlayerInfo", { params: params });
-  const players = resp.data.body;
+  const resp = await getNFLData("getNFLPlayerInfo", params);
+  const players = resp.body;
   return getPlayer(playerId ? players : players[0]);
 }

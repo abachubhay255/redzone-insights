@@ -2100,19 +2100,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios-cache-interceptor@npm:^1.5.3":
-  version: 1.5.3
-  resolution: "axios-cache-interceptor@npm:1.5.3"
-  dependencies:
-    cache-parser: "npm:1.2.5"
-    fast-defer: "npm:1.1.8"
-    object-code: "npm:1.3.3"
-  peerDependencies:
-    axios: ^1
-  checksum: 10c0/b28830049459c5e305e0687ce7e68d13894ca15920d2f2cbe858bee94f8d34299e0b4447f979e0e886d0e669858b48c9455bdee08675d23751b09603ef29e2d9
-  languageName: node
-  linkType: hard
-
 "axios@npm:^1.7.2":
   version: 1.7.2
   resolution: "axios@npm:1.7.2"
@@ -2233,13 +2220,6 @@ __metadata:
     tar: "npm:^6.1.11"
     unique-filename: "npm:^3.0.0"
   checksum: 10c0/6c055bafed9de4f3dcc64ac3dc7dd24e863210902b7c470eb9ce55a806309b3efff78033e3d8b4f7dcc5d467f2db43c6a2857aaaf26f0094b8a351d44c42179f
-  languageName: node
-  linkType: hard
-
-"cache-parser@npm:1.2.5":
-  version: 1.2.5
-  resolution: "cache-parser@npm:1.2.5"
-  checksum: 10c0/08ef9b465a0af87565f12448a2c250934f4c02f1247a9c519759139a0e2db5584f45ffa8401ce721f7e5a8f8ba1faf3ddc1e99c29e5e93aba01f7e1f4ee8ef9a
   languageName: node
   linkType: hard
 
@@ -3131,13 +3111,6 @@ __metadata:
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
   checksum: 10c0/40dedc862eb8992c54579c66d914635afbec43350afbbe991235fdcb4e3a8d5af1b23ae7e79bef7d4882d0ecee06c3197488026998fb19f72dc95acff1d1b1d0
-  languageName: node
-  linkType: hard
-
-"fast-defer@npm:1.1.8":
-  version: 1.1.8
-  resolution: "fast-defer@npm:1.1.8"
-  checksum: 10c0/4537cf81ce3e1505adba01dfe232231271162c8365427b360e0e86c8e4bf65f08d9e6ced1bd063fbafb48376f2ff152d1cad3cb25237126492921a15ce203e88
   languageName: node
   linkType: hard
 
@@ -4488,13 +4461,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-code@npm:1.3.3":
-  version: 1.3.3
-  resolution: "object-code@npm:1.3.3"
-  checksum: 10c0/804650eb9b7f23f612c5ba7afbfccc0406f622d701491a690d0492f6e01252096cfba85186fd39883fda6b0e04d623aa8d9485395830223af2395df32d55a75e
-  languageName: node
-  linkType: hard
-
 "object-inspect@npm:^1.13.1":
   version: 1.13.2
   resolution: "object-inspect@npm:1.13.2"
@@ -5109,7 +5075,6 @@ __metadata:
     "@types/node": "npm:^20.14.10"
     "@types/tmp": "npm:^0"
     axios: "npm:^1.7.2"
-    axios-cache-interceptor: "npm:^1.5.3"
     cors: "npm:^2.8.5"
     dotenv: "npm:^16.4.5"
     express: "npm:^4.19.2"

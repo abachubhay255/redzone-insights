@@ -3,14 +3,14 @@ import _ from "lodash";
 import { playerGameLogs } from "./gameLogs.js";
 import { playersByTeam } from "./players.js";
 import testData from "#s/testdata/test.json" assert { type: "json" };
-import { ToFilename } from "./utils.js";
+import { parseJsonResponse, ToFilename } from "./utils.js";
 
 type ProjectionsProps = {
   homeTeamId: string;
   awayTeamId: string;
 };
 
-export async function projections({ homeTeamId, awayTeamId }: ProjectionsProps) {
+export async function updateProjectionsModel({ homeTeamId, awayTeamId }: ProjectionsProps) {
   // const homePlayers = await playersByTeam({ teamId: homeTeamId });
   // const awayPlayers = await playersByTeam({ teamId: awayTeamId });
 
@@ -35,4 +35,16 @@ export async function projections({ homeTeamId, awayTeamId }: ProjectionsProps) 
   const response = await uploadFiles(objs, names);
 
   return response;
+}
+
+type PlayerProjectionProps = {
+  playerName: string;
+  isHome: boolean;
+  oppKey: string;
+};
+
+export async function playerProjection({ playerName, isHome, oppKey }: PlayerProjectionProps) {
+  const response = await sendMessage(`project the stats for ${playerName} for a(n) ${isHome ? "home" : "away"} game against ${oppKey}`);
+  const projection = parseJsonResponse(response ?? "");
+  return projection;
 }

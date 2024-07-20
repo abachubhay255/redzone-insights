@@ -62,3 +62,8 @@ export function ToFilename(input: string): string {
     .replace(/_+/g, "_") // Replace multiple underscores with a single one
     .trim(); // Remove leading and trailing whitespace
 }
+
+export function parseJsonResponse(json: string) {
+  const str = json.slice(7, -3); // remove prefix ``` json and suffix ``` from the string
+  return JSON.parse(str);
+}

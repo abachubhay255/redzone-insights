@@ -1,3 +1,35 @@
 type Query {
-  projections(homeTeamId: String!, awayTeamId: String!): String
+  updateProjectionsModel(homeTeamId: String!, awayTeamId: String!): String
+  playerProjection(playerName: String!, isHome: Boolean!, oppKey: String!): PlayerProjection
+}
+
+type PlayerProjection {
+  playerName: String
+  passing: PassingProjections
+  rushing: RushingProjections
+  receiving: ReceivingProjections
+}
+
+type PassingProjections {
+  yards: Float
+  touchdowns: Float
+  attempts: Float
+  completions: Float
+  interceptions: Float
+  yardsPerPass: Float
+}
+
+type RushingProjections {
+  yards: Float
+  touchdowns: Float
+  carries: Float
+  yardsPerCarry: Float
+}
+
+type ReceivingProjections {
+  yards: Float
+  touchdowns: Float
+  receptions: Float
+  targets: Float
+  yardsPerCatch: Float
 }

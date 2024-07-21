@@ -1,0 +1,37 @@
+type Query {
+  teams: [Team]
+}
+
+type Team {
+  id: ID
+  city: String
+  name: String
+  key: String
+  logo: String
+  conference: String
+  conferenceKey: String
+  division: String
+  games: Int
+  wins: Int
+  ties: Int
+  losses: Int
+  streak: String
+  pointsFor: Float
+  pointsAgainst: Float
+  statsPerGame: TeamStats
+}
+
+type TeamStats {
+  rushYards: Float
+  rushTds: Float
+  passYards: Float
+  passTds: Float
+  allowedRushYards: Float
+  allowedRushTds: Float
+  allowedPassYards: Float
+  allowedPassTds: Float
+  rushOffenseRank: Int
+  passOffenseRank: Int
+  rushDefenseRank: Int
+  passDefenseRank: Int
+}

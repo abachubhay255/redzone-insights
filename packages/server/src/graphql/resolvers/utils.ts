@@ -67,3 +67,7 @@ export function parseJsonResponse(json: string) {
   const str = json.slice(7, -3); // remove prefix ``` json and suffix ``` from the string
   return JSON.parse(str);
 }
+
+export function round(value: number): number {
+  return parseFloat(value.toFixed(1));
+}

@@ -6,8 +6,7 @@ export const getNFL = Axios.create({
   baseURL: "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/",
   timeout: 5000,
   headers: {
-    // "x-rapidapi-key": process.env.NFL_API_KEY,
-    "x-rapidapi-key": "",
+    "x-rapidapi-key": process.env.NFL_API_KEY,
     "x-rapidapi-host": "tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com"
   },
   method: "get"

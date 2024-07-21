@@ -3,6 +3,7 @@ import { nflScoresWeekly } from "./scores.js";
 import { playerGameLogs } from "./gameLogs.js";
 import { playerInfo, playersByTeam } from "./players.js";
 import { playerProjection, updateProjectionsModel } from "./projections.js";
+import { teams } from "./teams.js";
 
 export const resolvers: IResolvers = {
   hello: () => "Hello world!",
@@ -11,5 +12,6 @@ export const resolvers: IResolvers = {
   playersByTeam,
   playerInfo,
   updateProjectionsModel,
-  playerProjection
+  playerProjection,
+  teams
 };

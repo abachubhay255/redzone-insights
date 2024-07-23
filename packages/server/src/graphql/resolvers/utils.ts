@@ -54,13 +54,16 @@ export function getPlayer(player: any) {
   };
 }
 
-export function ToFilename(input: string): string {
+export function ToFilename(input: string, ext?: string): string {
   // Replace invalid characters with underscores
-  return input
-    .replace(/[<>:"\/\\|?*\x00-\x1F]/g, "_")
-    .replace(/\s+/g, "_") // Replace spaces with underscores
-    .replace(/_+/g, "_") // Replace multiple underscores with a single one
-    .trim(); // Remove leading and trailing whitespace
+  return (
+    input
+      .replace(/[<>:"\/\\|?*\x00-\x1F]/g, "_")
+      .replace(/\s+/g, "_") // Replace spaces with underscores
+      .replace(/_+/g, "_") // Replace multiple underscores with a single one
+      .trim() + // Remove leading and trailing whitespace
+    (ext || ".json") // Add .json extension
+  );
 }
 
 export function parseJsonResponse(json: string) {

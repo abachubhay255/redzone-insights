@@ -19,9 +19,8 @@ export async function getVectorStore() {
 }
 
 async function createTempJsonFile(obj: any, filename: string): Promise<string> {
-  const tempFilename = `${filename}.json`;
-  await fsProm.writeFile(tempFilename, JSON.stringify(obj));
-  return tempFilename;
+  await fsProm.writeFile(filename, JSON.stringify(obj));
+  return filename;
 }
 
 export async function uploadFiles(objects: any[], filenames: string[]) {
@@ -32,21 +31,23 @@ export async function uploadFiles(objects: any[], filenames: string[]) {
 
     const storageFiles = await openai.files.list();
 
-    let filesToUpdate = new Set<string>(filenames);
+    const filesToUpdate = new Set<string>(filenames);
 
     // if the file is less than 1 day old it doesn't need to be updated, if older than 1 day delete it from the vector store
     for (const file of storageFiles.data) {
-      if (filesToUpdate.has(file.filename)) {
-        // check if file is older than 1 day
-        if (file.created_at < Date.now() - ONE_DAY_MILLISECONDS) {
-          await openai.files.del(file.id);
-        }
-        // file is already up to date
-        else {
-          filesToUpdate.delete(file.filename);
-        }
+      // check if file is older than 1 day
+      const oneDayAgo = Math.floor(Date.now() / 1000) - ONE_DAY_SECONDS;
+      if (file.created_at < oneDayAgo) {
+        console.log("Deleting old file: ", file.filename, file.id);
+        await openai.files.del(file.id);
+      }
+      // file is already up to date
+      else {
+        filesToUpdate.delete(file.filename);
       }
     }
+
+    console.log("Files to update: ", filesToUpdate);
 
     if (filesToUpdate.size === 0) {
       console.log("All files are up to date");
@@ -103,4 +104,4 @@ export async function sendMessage(content: string) {
   }
 }
 
-const ONE_DAY_MILLISECONDS = 1000 * 60 * 60 * 24;
+const ONE_DAY_SECONDS = 60 * 60 * 24;

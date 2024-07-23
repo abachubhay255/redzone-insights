@@ -32,7 +32,7 @@ export async function uploadFiles(objects: any[], filenames: string[]) {
 
     const storageFiles = await openai.files.list();
 
-    let filesToUpdate = new Set<string>();
+    let filesToUpdate = new Set<string>(filenames);
 
     // if the file is less than 1 day old it doesn't need to be updated, if older than 1 day delete it from the vector store
     for (const file of storageFiles.data) {
@@ -40,12 +40,16 @@ export async function uploadFiles(objects: any[], filenames: string[]) {
         // check if file is older than 1 day
         if (file.created_at < Date.now() - ONE_DAY_MILLISECONDS) {
           await openai.files.del(file.id);
-          filesToUpdate.add(file.filename);
+        }
+        // file is already up to date
+        else {
+          filesToUpdate.delete(file.filename);
         }
       }
     }
 
     if (filesToUpdate.size === 0) {
+      console.log("All files are up to date");
       return "success";
     }
 

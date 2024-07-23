@@ -4,6 +4,7 @@ import { playerGameLogs } from "./gameLogs.js";
 import { playersByTeam } from "./players.js";
 import testData from "#s/testdata/test.json" assert { type: "json" };
 import { parseJsonResponse, ToFilename } from "./utils.js";
+import { teams } from "./teams.js";
 
 type ProjectionsProps = {
   homeTeamId: string;
@@ -32,6 +33,10 @@ export async function updateProjectionsModel({ homeTeamId, awayTeamId }: Project
     names.push(ToFilename(str));
   }
 
+  const teamStats = await teams();
+  objs.push(teamStats);
+  names.push(ToFilename("teamStats"));
+
   const response = await uploadFiles(objs, names);
 
   return response;
@@ -45,6 +50,9 @@ type PlayerProjectionProps = {
 
 export async function playerProjection({ playerName, isHome, oppKey }: PlayerProjectionProps) {
   const response = await sendMessage(`project the stats for ${playerName} for a(n) ${isHome ? "home" : "away"} game against ${oppKey}`);
+  if (!response) {
+    throw new Error("No response from OpenAI API");
+  }
   const projection = parseJsonResponse(response ?? "");
   return projection;
 }

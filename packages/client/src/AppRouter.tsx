@@ -3,6 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Shell } from "./navigation/Shell";
 import { Scores } from "./pages/Scores";
 import { NotFound } from "./pages/NotFound";
+import { Standings } from "./pages/Standings";
+import { Parlays } from "./pages/Parlays";
 
 const routerBase = [
   {
@@ -14,6 +16,14 @@ const routerBase = [
       {
         index: true,
         element: <Scores />
+      },
+      {
+        path: "/standings",
+        element: <Standings />
+      },
+      {
+        path: "/parlays",
+        element: <Parlays />
       }
     ]
   }

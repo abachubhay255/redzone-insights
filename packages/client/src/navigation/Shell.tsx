@@ -1,12 +1,14 @@
 import { AppShell, Burger, Container, Group } from "@mantine/core";
 import { HeaderItem } from "./HeaderItem";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useMemo } from "react";
+import { Outlet, useMatches } from "react-router-dom";
 
 export function Shell() {
   const [opened, { toggle }] = useDisclosure();
-  const [active, setActive] = useState(pages[0].link);
+  const matches = useMatches();
+
+  const active = useMemo(() => (matches.length > 1 ? matches[1].pathname : "/"), [matches]);
 
   return (
     <AppShell header={{ height: 60 }} navbar={{ width: 300, breakpoint: "sm", collapsed: { desktop: true, mobile: !opened } }} padding="md">
@@ -16,15 +18,7 @@ export function Shell() {
 
           <Group ml="auto" mr="auto" visibleFrom="sm">
             {pages.map(page => (
-              <HeaderItem
-                key={page.link}
-                link={page.link}
-                label={page.label}
-                active={active === page.link}
-                onClick={e => {
-                  setActive(page.link);
-                }}
-              />
+              <HeaderItem key={page.link} link={page.link} label={page.label} active={active === page.link} />
             ))}
           </Group>
         </Group>
@@ -32,16 +26,7 @@ export function Shell() {
 
       <AppShell.Navbar py="md" px={4}>
         {pages.map(page => (
-          <HeaderItem
-            key={page.link}
-            link={page.link}
-            label={page.label}
-            active={active === page.link}
-            onClick={e => {
-              toggle();
-              setActive(page.link);
-            }}
-          />
+          <HeaderItem key={page.link} link={page.link} label={page.label} active={active === page.link} onClick={toggle} />
         ))}
       </AppShell.Navbar>
 
@@ -56,7 +41,6 @@ export function Shell() {
 
 const pages = [
   { link: "/", label: "Scores" },
-  { link: "/pricing", label: "Pricing" },
-  { link: "/learn", label: "Learn" },
-  { link: "/community", label: "Community" }
+  { link: "/standings", label: "Standings" },
+  { link: "/parlays", label: "Parlays" }
 ];

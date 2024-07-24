@@ -1,16 +1,16 @@
+import { Link, LinkProps } from "react-router-dom";
 import classes from "./HeaderItem.module.css";
 
 type HeaderItemProps = {
   link: string;
   label: string;
   active: boolean;
-  onClick: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-export function HeaderItem({ link, label, active, onClick }: HeaderItemProps) {
+export function HeaderItem({ link, label, active, ...props }: HeaderItemProps & Partial<LinkProps>) {
   return (
-    <a key={label} href={link} className={classes.link} data-active={active || undefined} onClick={onClick}>
+    <Link key={label} to={link} className={classes.link} data-active={active || undefined} {...props}>
       {label}
-    </a>
+    </Link>
   );
 }

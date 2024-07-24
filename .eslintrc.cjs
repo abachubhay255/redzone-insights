@@ -11,7 +11,6 @@ module.exports = {
     node: true
   },
   rules: {
-    "no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     "no-throw-literal": "error",

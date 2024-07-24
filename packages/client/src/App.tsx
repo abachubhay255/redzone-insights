@@ -1,11 +1,13 @@
-import "./App.css";
+import { Shell } from "./navigation/Shell";
 import { ReactQueryProvider } from "./providers/ReactQueryProvider";
-import { Home } from "./Home";
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 function App() {
   return (
     <ReactQueryProvider>
-      <Home />
+      <ThemeProvider>
+        <Shell />
+      </ThemeProvider>
     </ReactQueryProvider>
   );
 }

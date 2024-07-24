@@ -6,7 +6,7 @@ import { playerProjection, updateProjectionsModel } from "./projections.js";
 import { teams } from "./teams.js";
 
 export const resolvers: IResolvers = {
-  hello: () => "Hello world!",
+  hello: ({ message }) => "Hello " + message,
   nflScoresWeekly,
   playerGameLogs,
   playersByTeam,

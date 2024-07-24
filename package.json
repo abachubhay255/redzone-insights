@@ -11,9 +11,12 @@
     "client-build": "yarn workspace client build",
     "client-tsc": "yarn workspace client tsc",
     "server": "yarn workspace server dev",
-    "server-build": "yarn workspace server build"
+    "server-build": "yarn workspace server build",
+    "generate": "graphql-codegen-esm --config codegen.ts"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/typescript-resolvers": "^4.2.1",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^7.16.0",

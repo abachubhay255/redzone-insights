@@ -1,3 +1,7 @@
 type Query {
-  hello: String
+  hello(message: String!): String
+}
+
+query sayHello($message: String!) {
+  hello(message: $message)
 }

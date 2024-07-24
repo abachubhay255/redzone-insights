@@ -32,9 +32,14 @@ app.use("/graphql", async (req, res, next) => {
     rootValue: resolvers
   });
 
+  if (req.headers["no-server-cache"] === "true") {
+    return graphqlHandler(req, res, next);
+  }
+
   if (!req.body) {
     return graphqlHandler(req, res, next);
   }
+
   const { query } = req.body;
 
   // Try reading from cache

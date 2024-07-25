@@ -2390,6 +2390,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "@tabler/icons-react@npm:3.11.0"
+  dependencies:
+    "@tabler/icons": "npm:3.11.0"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10c0/5c3c999ecf9d09ed598ad15e7f938abc3a4eef31f601a0f2523123d925358db8c3286cbe4ec1b2de18e70a1e765c371f15e070ab1e82320f4f417a43a7d8ea87
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.11.0":
+  version: 3.11.0
+  resolution: "@tabler/icons@npm:3.11.0"
+  checksum: 10c0/335558d3e2272e7301a51e5ec2b7c00f32364a004406e5f3ed21a02391017572be4d1baa409718384178bcf1d590b2f84470e847228d0b1305aef597d8be5cd7
+  languageName: node
+  linkType: hard
+
 "@tanstack/eslint-plugin-query@npm:^5.51.12":
   version: 5.51.12
   resolution: "@tanstack/eslint-plugin-query@npm:5.51.12"
@@ -3759,6 +3777,7 @@ __metadata:
   dependencies:
     "@mantine/core": "npm:^7.11.2"
     "@mantine/hooks": "npm:^7.11.2"
+    "@tabler/icons-react": "npm:^3.11.0"
     "@tanstack/eslint-plugin-query": "npm:^5.51.12"
     "@tanstack/react-query": "npm:^5.51.11"
     "@types/react": "npm:^18.3.3"

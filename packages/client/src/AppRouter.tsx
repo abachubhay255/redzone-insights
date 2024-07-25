@@ -5,6 +5,7 @@ import { Scores } from "./pages/Scores";
 import { NotFound } from "./pages/NotFound";
 import { Standings } from "./pages/Standings";
 import { Parlays } from "./pages/Parlays";
+import { AppLoader } from "./components/AppLoader";
 
 const routerBase = [
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter(routerBase);
 
 export default function AppRouter() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<AppLoader />}>
       <RouterProvider router={router} />
     </Suspense>
   );

@@ -40,10 +40,12 @@ app.use("/graphql", async (req, res, next) => {
     return graphqlHandler(req, res, next);
   }
 
-  const { query } = req.body;
+  const { query, variables } = req.body;
+
+  const cacheKey = query + (variables ? JSON.stringify(variables) : "");
 
   // Try reading from cache
-  const cachedResponse = await readCache(query);
+  const cachedResponse = await readCache(cacheKey);
   if (cachedResponse) {
     return res.json(cachedResponse);
   }
@@ -53,7 +55,7 @@ app.use("/graphql", async (req, res, next) => {
 
   res.end = async function (this: any, ...props: [any, any, any]) {
     // Write to cache
-    await writeCache(query, JSON.parse(props[0]));
+    await writeCache(cacheKey, JSON.parse(props[0]));
     // Call the original end method
     originalEnd.call(this, ...props);
     return res;

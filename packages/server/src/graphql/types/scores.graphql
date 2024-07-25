@@ -17,3 +17,18 @@ type NFLScoresWeekly {
   homePts: Int
   gameClock: String
 }
+
+query getScores($week: Int!, $season: Int) {
+  nflScoresWeekly(week: $week, season: $season) {
+    gameId
+    gameEpoch
+    homeKey
+    awayKey
+    homeId
+    awayId
+    gameStatus
+    awayPts
+    homePts
+    gameClock
+  }
+}

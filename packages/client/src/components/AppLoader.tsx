@@ -2,7 +2,7 @@ import { Center, Loader } from "@mantine/core";
 
 export function AppLoader() {
   return (
-    <Center>
+    <Center my="md">
       <Loader type="bars" />
     </Center>
   );

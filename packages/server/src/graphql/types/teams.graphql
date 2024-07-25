@@ -21,6 +21,26 @@ type Team {
   statsPerGame: TeamStats
 }
 
+query GetTeamsWithoutStats {
+  teams {
+    id
+    city
+    name
+    key
+    logo
+    conference
+    conferenceKey
+    division
+    games
+    wins
+    ties
+    losses
+    streak
+    pointsFor
+    pointsAgainst
+  }
+}
+
 type TeamStats {
   rushYards: Float
   rushTds: Float

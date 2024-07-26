@@ -55,3 +55,33 @@ type TeamStats {
   rushDefenseRank: Int
   passDefenseRank: Int
 }
+
+query GetTeamsWithStats {
+  teams {
+    id
+    city
+    name
+    key
+    logo
+    conference
+    conferenceKey
+    division
+    games
+    wins
+    ties
+    losses
+    streak
+    pointsFor
+    pointsAgainst
+    statsPerGame {
+      rushYards
+      rushTds
+      passYards
+      passTds
+      allowedRushYards
+      allowedRushTds
+      allowedPassYards
+      allowedPassTds
+    }
+  }
+}

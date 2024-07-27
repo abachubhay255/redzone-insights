@@ -37,7 +37,6 @@ export function Scores() {
   const getTeamScore = useCallback(
     (pts?: number | null, status?: string | null, id?: string | null) => {
       const { wins, losses, ties } = teamsById[id ?? ""] ?? {};
-      console.log(status);
       if (status === "Not Started Yet") return formatRecord(wins || 0, losses || 0, ties || 0);
       return pts;
     },

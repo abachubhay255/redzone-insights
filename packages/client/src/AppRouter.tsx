@@ -4,7 +4,7 @@ import { Shell } from "./navigation/Shell";
 import { Scores } from "./pages/Scores";
 import { NotFound } from "./pages/NotFound";
 import { Standings } from "./pages/Standings";
-import { Parlays } from "./pages/Parlays";
+import { Parlays } from "./pages/parlays/Parlays";
 import { AppLoader } from "./components/AppLoader";
 
 const routerBase = [

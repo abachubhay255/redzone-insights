@@ -29,13 +29,16 @@ jobs:
           yarn install --frozen-lockfile
           yarn run server-build
 
-      - name: Zip build artifacts for deployment
+      - name: Prepare build artifacts
         run: |
           mkdir -p release
           cp -r packages/server/dist release/
           cp -r node_modules release/
           cp package.json release/
           cp yarn.lock release/
+        
+      - name: Zip build artifacts for deployment
+        run: |
           cd release
           zip -r ../release.zip .
 
@@ -61,7 +64,8 @@ jobs:
           name: node-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: |
+          unzip release.zip
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -76,4 +80,4 @@ jobs:
         with:
           app-name: 'server-redzone-insights'
           slot-name: 'Production'
-          package: ./release
+          package: './release'

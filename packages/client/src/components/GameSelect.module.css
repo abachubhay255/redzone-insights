@@ -1,5 +1,9 @@
 .game {
+  transition:
+    box-shadow 150ms ease,
+    transform 100ms ease;
   @mixin hover {
-    opacity: 0.6;
+    transform: scale(1.04);
+    box-shadow: var(--mantine-shadow-md);
   }
 }

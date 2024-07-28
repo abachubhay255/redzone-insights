@@ -17,3 +17,14 @@ type Player {
   picture: String
   age: Int
 }
+
+query getPlayersByTeamBasic($teamId: ID!) {
+  playersByTeam(teamId: $teamId) {
+    playerId
+    teamId
+    teamKey
+    name
+    position
+    picture
+  }
+}

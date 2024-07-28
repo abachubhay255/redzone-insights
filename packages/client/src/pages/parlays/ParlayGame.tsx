@@ -9,7 +9,6 @@ import { useGraphQL } from "#s/graphql/useGraphQL";
 import { GetTeamsWithoutStatsDocument, UpdateProjectionsDocument } from "#s/graphql/types-and-documents";
 import { useMobile } from "#s/hooks/useMobile";
 import { keyBy } from "lodash";
-import { AppLoader } from "#s/components/AppLoader";
 
 export type ParlayGameType = {
   gameInfo: NFLGame;
@@ -95,7 +94,12 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
       <Stack my="sm">
         {parlayLegs.map(leg => (
           <Card p="xs" bg="dark.9" key={leg.id}>
-            <ParlayLeg gameInfo={gameInfo} updateParlayLeg={l => updateParlayLeg(leg.id, l)} {...leg} />
+            <ParlayLeg
+              gameInfo={gameInfo}
+              updateParlayLeg={l => updateParlayLeg(leg.id, l)}
+              {...leg}
+              projectionsUpToDate={data?.result === "success"}
+            />
             <ActionIcon
               title="Delete Leg"
               pos="absolute"

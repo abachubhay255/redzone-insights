@@ -14,6 +14,7 @@ export async function updateProjectionsModel({ homeTeamId, awayTeamId }: Project
   if (!homeTeamId || !awayTeamId) {
     return "No team ID provided";
   }
+  console.log("Updating projections model for teams", homeTeamId, awayTeamId);
   const homePlayers = await playersByTeam({ teamId: homeTeamId });
   const awayPlayers = await playersByTeam({ teamId: awayTeamId });
 
@@ -39,6 +40,7 @@ export async function updateProjectionsModel({ homeTeamId, awayTeamId }: Project
 
   const response = await uploadFiles(objs, names);
 
+  console.log("Finished", response);
   return response;
 }
 

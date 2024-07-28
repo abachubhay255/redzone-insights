@@ -26,9 +26,10 @@ export type ParlayLegType = {
 type Props = ParlayLegType & {
   gameInfo: NFLGame;
   updateParlayLeg: (leg: Partial<ParlayLegType>) => void;
+  projectionsUpToDate: boolean;
 };
 
-export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, gameInfo, updateParlayLeg }: Props) {
+export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, gameInfo, updateParlayLeg, projectionsUpToDate }: Props) {
   const { data: awayData } = useGraphQL(GetPlayersByTeamBasicDocument, { teamId: gameInfo?.awayId ?? "" });
 
   const { data: homeData } = useGraphQL(GetPlayersByTeamBasicDocument, { teamId: gameInfo?.homeId ?? "" });
@@ -62,7 +63,10 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
 
   const statSelectData = useMemo(() => statData.filter(({ group }) => matchedStats.has(group)), [matchedStats]);
 
-  const playerProjectionArgs = useMemo(() => getPlayerProjectionArgs(player, gameInfo), [player, gameInfo]);
+  const showPlayerProjection = useMemo(
+    () => playerProjectionAvailable(player, gameInfo, projectionsUpToDate),
+    [player, gameInfo, projectionsUpToDate]
+  );
 
   return (
     <Group>
@@ -114,13 +118,16 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
       {playerId && (
         <GameLogs playerId={playerId} stat={stat} overUnder={overUnder} statValue={statValue} position={player?.position as NFLPosition} />
       )}
-      {playerProjectionArgs && <PlayerProjection {...playerProjectionArgs} stat={stat} />}
+      {showPlayerProjection && <PlayerProjection {...showPlayerProjection} stat={stat} />}
     </Group>
   );
 }
 
 // only load player projections if player and game info are available and valid
-function getPlayerProjectionArgs(player: Partial<Player> | null, gameInfo: NFLGame) {
+function playerProjectionAvailable(player: Partial<Player> | null, gameInfo: NFLGame, projectionsUpToDate: boolean) {
+  if (!projectionsUpToDate) {
+    return null;
+  }
   if (!player?.name || !gameInfo || !gameInfo.homeId || !gameInfo.homeKey || !gameInfo.awayKey) {
     return null;
   }

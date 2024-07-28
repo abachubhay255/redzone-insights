@@ -72,5 +72,5 @@ jobs:
         with:
           app-name: 'server-redzone-insights'
           slot-name: 'Production'
-          package: ./packages/server
+          package: ./packages/server/dist
           

@@ -2,14 +2,16 @@ import { NFLGame } from "#s/components/GameSelect";
 import { GetPlayersByTeamBasicDocument, PassingStats, ReceivingStats, RushingStats } from "#s/graphql/types-and-documents";
 import { useGraphQL } from "#s/graphql/useGraphQL";
 import { Avatar, Card, Group, NumberInput, SegmentedControl, Select, SelectProps } from "@mantine/core";
-import { keyBy } from "lodash";
+import { get, keyBy } from "lodash";
 import { useMemo } from "react";
+import { GameLogs, NFLPosition } from "./GameLogs";
+import { isNFLPasser, isNFLReceiver, isNFLRusher } from "../utils";
 
 type StatType = "passing" | "receiving" | "rushing";
 
 type AllStats = Omit<PassingStats & ReceivingStats & RushingStats, "__typename">;
 
-type NFLStat = `${StatType}.${keyof AllStats}`;
+export type NFLStat = `${StatType}.${keyof AllStats}`;
 
 export type ParlayLegType = {
   id: string;
@@ -53,6 +55,10 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
     </Group>
   );
 
+  const matchedStats = useMemo(() => getStatGroups(playersById[playerId]?.position as NFLPosition), [playerId, playersById]);
+
+  const statSelectData = useMemo(() => statData.filter(({ group }) => matchedStats.has(group)), [matchedStats]);
+
   return (
     <Group>
       <Avatar src={playersById[playerId]?.picture} size="sm" />
@@ -63,12 +69,21 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
         placeholder="Choose Player"
         renderOption={renderSelectOption}
         value={playerId}
-        onChange={pid => updateParlayLeg({ playerId: pid ?? "", playerName: playersById[pid ?? ""]?.name ?? "" })}
+        onChange={pid => {
+          const player = playersById[pid ?? ""];
+          const defaultStat = getDefaultStatPerPosition(player?.position as NFLPosition);
+          updateParlayLeg({
+            playerId: pid ?? "",
+            playerName: player?.name ?? "",
+            stat: defaultStat,
+            statValue: getDefaultStatValue(defaultStat)
+          });
+        }}
       />
       <Select
         searchable
         selectFirstOptionOnChange
-        data={statData}
+        data={statSelectData}
         placeholder="Choose Stat"
         value={stat}
         onChange={stat => updateParlayLeg({ stat: (stat as NFLStat) ?? "passing.yards", statValue: getDefaultStatValue(stat as NFLStat) })}
@@ -91,9 +106,45 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
         value={statValue}
         onChange={val => updateParlayLeg({ statValue: val as number })}
       />
+      {playerId && (
+        <GameLogs
+          playerId={playerId}
+          stat={stat}
+          overUnder={overUnder}
+          statValue={statValue}
+          position={playersById[playerId]?.position as NFLPosition}
+        />
+      )}
     </Group>
   );
 }
+
+function getDefaultStatPerPosition(position: NFLPosition) {
+  if (position === "QB") {
+    return "passing.yards";
+  }
+  if (position === "WR" || position === "TE") {
+    return "receiving.yards";
+  }
+  if (position === "RB") {
+    return "rushing.yards";
+  }
+  return "passing.yards";
+}
+
+const getStatGroups = (position: NFLPosition) => {
+  let groups = new Set<string>();
+  if (isNFLPasser(position)) {
+    groups.add("Passing");
+  }
+  if (isNFLRusher(position)) {
+    groups.add("Rushing");
+  }
+  if (isNFLReceiver(position)) {
+    groups.add("Receiving");
+  }
+  return groups;
+};
 
 const statData = [
   {

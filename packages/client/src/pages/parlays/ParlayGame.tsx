@@ -89,8 +89,8 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
       </Card.Section>
       <Stack my="sm">
         {parlayLegs.map(leg => (
-          <Card p="xs" bg="dark.9">
-            <ParlayLeg key={leg.id} gameInfo={gameInfo} updateParlayLeg={l => updateParlayLeg(leg.id, l)} {...leg} />
+          <Card p="xs" bg="dark.9" key={leg.id}>
+            <ParlayLeg gameInfo={gameInfo} updateParlayLeg={l => updateParlayLeg(leg.id, l)} {...leg} />
             <ActionIcon
               title="Delete Leg"
               pos="absolute"

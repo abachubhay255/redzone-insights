@@ -39,7 +39,7 @@ export const readCache = async (query: string): Promise<any | null> => {
 
 export const writeCache = async (query: string, result: any): Promise<void> => {
   const cacheKey = getCacheKey(query);
-  if (result.errors || result.data?.__schema) {
+  if (result.errors || result.error || result.data?.__schema) {
     return;
   }
   await fs.writeFile(cacheKey, JSON.stringify(result), "utf-8");

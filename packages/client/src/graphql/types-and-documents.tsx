@@ -205,6 +205,49 @@ export type TeamStats = {
   rushYards?: Maybe<Scalars["Float"]["output"]>;
 };
 
+export type GetGameLogsQueryVariables = Exact<{
+  playerId: Scalars["ID"]["input"];
+}>;
+
+export type GetGameLogsQuery = {
+  __typename?: "Query";
+  playerGameLogs?: Array<{
+    __typename?: "PlayerGameLogs";
+    playerId?: string | null;
+    playerName?: string | null;
+    teamId?: string | null;
+    gameId?: string | null;
+    gameDate?: any | null;
+    oppKey?: string | null;
+    isHome?: boolean | null;
+    teamKey?: string | null;
+    passing?: {
+      __typename?: "PassingStats";
+      yards?: number | null;
+      touchdowns?: number | null;
+      attempts?: number | null;
+      completions?: number | null;
+      interceptions?: number | null;
+      yardsPerPass?: number | null;
+    } | null;
+    rushing?: {
+      __typename?: "RushingStats";
+      yards?: number | null;
+      touchdowns?: number | null;
+      carries?: number | null;
+      yardsPerCarry?: number | null;
+    } | null;
+    receiving?: {
+      __typename?: "ReceivingStats";
+      yards?: number | null;
+      touchdowns?: number | null;
+      receptions?: number | null;
+      targets?: number | null;
+      yardsPerCatch?: number | null;
+    } | null;
+  } | null> | null;
+};
+
 export type SayHelloQueryVariables = Exact<{
   message: Scalars["String"]["input"];
 }>;
@@ -309,6 +352,95 @@ export type GetTeamsWithStatsQuery = {
   } | null> | null;
 };
 
+export const GetGameLogsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getGameLogs" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "playerId" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } }
+        }
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "playerGameLogs" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "playerId" },
+                value: { kind: "Variable", name: { kind: "Name", value: "playerId" } }
+              },
+              { kind: "Argument", name: { kind: "Name", value: "games" }, value: { kind: "IntValue", value: "5" } }
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "playerId" } },
+                { kind: "Field", name: { kind: "Name", value: "playerName" } },
+                { kind: "Field", name: { kind: "Name", value: "teamId" } },
+                { kind: "Field", name: { kind: "Name", value: "gameId" } },
+                { kind: "Field", name: { kind: "Name", value: "gameDate" } },
+                { kind: "Field", name: { kind: "Name", value: "oppKey" } },
+                { kind: "Field", name: { kind: "Name", value: "isHome" } },
+                { kind: "Field", name: { kind: "Name", value: "teamKey" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "passing" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "yards" } },
+                      { kind: "Field", name: { kind: "Name", value: "touchdowns" } },
+                      { kind: "Field", name: { kind: "Name", value: "attempts" } },
+                      { kind: "Field", name: { kind: "Name", value: "completions" } },
+                      { kind: "Field", name: { kind: "Name", value: "interceptions" } },
+                      { kind: "Field", name: { kind: "Name", value: "yardsPerPass" } }
+                    ]
+                  }
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "rushing" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "yards" } },
+                      { kind: "Field", name: { kind: "Name", value: "touchdowns" } },
+                      { kind: "Field", name: { kind: "Name", value: "carries" } },
+                      { kind: "Field", name: { kind: "Name", value: "yardsPerCarry" } }
+                    ]
+                  }
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "receiving" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "yards" } },
+                      { kind: "Field", name: { kind: "Name", value: "touchdowns" } },
+                      { kind: "Field", name: { kind: "Name", value: "receptions" } },
+                      { kind: "Field", name: { kind: "Name", value: "targets" } },
+                      { kind: "Field", name: { kind: "Name", value: "yardsPerCatch" } }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+} as unknown as DocumentNode<GetGameLogsQuery, GetGameLogsQueryVariables>;
 export const SayHelloDocument = {
   kind: "Document",
   definitions: [

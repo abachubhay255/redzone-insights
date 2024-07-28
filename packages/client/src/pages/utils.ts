@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { NFLPosition } from "./parlays/GameLogs";
 
 export function getNFLWeek(date: Date): number {
   const seasonStartDate = new Date("09/05/2024");
@@ -26,4 +27,27 @@ export function formatGameDay(epoch: string) {
 
 export function formatRecord(wins: number, losses: number, ties: number) {
   return `${wins}-${losses}${ties ? `-${ties}` : ""}`;
+}
+
+export function getHitColor(hits: number, total: number) {
+  const hitRate = hits / total;
+  if (hitRate >= 0.66) {
+    return "green";
+  } else if (hitRate >= 0.33) {
+    return "yellow";
+  } else {
+    return "red";
+  }
+}
+
+export function isNFLRusher(position: NFLPosition) {
+  return position === "RB" || position === "QB" || position === "WR" || position === "TE";
+}
+
+export function isNFLPasser(position: NFLPosition) {
+  return position === "QB";
+}
+
+export function isNFLReceiver(position: NFLPosition) {
+  return position === "RB" || position === "WR" || position === "TE";
 }

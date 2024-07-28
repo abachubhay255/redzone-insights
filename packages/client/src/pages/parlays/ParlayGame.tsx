@@ -6,9 +6,10 @@ import { v4 } from "uuid";
 import { useCallback, useMemo } from "react";
 import { IconAt, IconTrash } from "@tabler/icons-react";
 import { useGraphQL } from "#s/graphql/useGraphQL";
-import { GetTeamsWithoutStatsDocument } from "#s/graphql/types-and-documents";
+import { GetTeamsWithoutStatsDocument, UpdateProjectionsDocument } from "#s/graphql/types-and-documents";
 import { useMobile } from "#s/hooks/useMobile";
 import { keyBy } from "lodash";
+import { AppLoader } from "#s/components/AppLoader";
 
 export type ParlayGameType = {
   gameInfo: NFLGame;
@@ -20,7 +21,11 @@ type Props = ParlayGameType & {
 };
 
 export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
-  const { data: teams, isLoading: teamsLoading } = useGraphQL(GetTeamsWithoutStatsDocument, {});
+  const { data } = useGraphQL(UpdateProjectionsDocument, {
+    homeTeamId: gameInfo?.homeId ?? "",
+    awayTeamId: gameInfo?.awayId ?? ""
+  });
+  const { data: teams } = useGraphQL(GetTeamsWithoutStatsDocument, {});
 
   const teamsById = useMemo(() => keyBy(teams?.teams, "id"), [teams]);
 

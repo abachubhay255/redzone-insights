@@ -1,11 +1,12 @@
 import { NFLGame } from "#s/components/GameSelect";
-import { GetPlayersByTeamBasicDocument, PassingStats, ReceivingStats, RushingStats } from "#s/graphql/types-and-documents";
+import { GetPlayersByTeamBasicDocument, PassingStats, Player, ReceivingStats, RushingStats } from "#s/graphql/types-and-documents";
 import { useGraphQL } from "#s/graphql/useGraphQL";
 import { Avatar, Group, NumberInput, SegmentedControl, Select, SelectProps } from "@mantine/core";
 import { keyBy } from "lodash";
 import { useMemo } from "react";
 import { GameLogs, NFLPosition } from "./GameLogs";
 import { isNFLPasser, isNFLReceiver, isNFLRusher } from "../utils";
+import { PlayerProjection } from "./PlayerProjection";
 
 type StatType = "passing" | "receiving" | "rushing";
 
@@ -37,6 +38,8 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
 
   const playersById = useMemo(() => keyBy([...awayPlayers, ...homePlayers], "playerId"), [awayPlayers, homePlayers]);
 
+  const player = useMemo(() => playersById[playerId], [playerId, playersById]);
+
   const playerSelectData = useMemo(
     () =>
       [...awayPlayers, ...homePlayers]
@@ -55,13 +58,15 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
     </Group>
   );
 
-  const matchedStats = useMemo(() => getStatGroups(playersById[playerId]?.position as NFLPosition), [playerId, playersById]);
+  const matchedStats = useMemo(() => getStatGroups(player?.position as NFLPosition), [playerId, player]);
 
   const statSelectData = useMemo(() => statData.filter(({ group }) => matchedStats.has(group)), [matchedStats]);
 
+  const playerProjectionArgs = useMemo(() => getPlayerProjectionArgs(player, gameInfo), [player, gameInfo]);
+
   return (
     <Group>
-      <Avatar src={playersById[playerId]?.picture} size="sm" />
+      <Avatar src={player?.picture} size="sm" />
       <Select
         searchable
         selectFirstOptionOnChange
@@ -107,16 +112,24 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
         onChange={val => updateParlayLeg({ statValue: val as number })}
       />
       {playerId && (
-        <GameLogs
-          playerId={playerId}
-          stat={stat}
-          overUnder={overUnder}
-          statValue={statValue}
-          position={playersById[playerId]?.position as NFLPosition}
-        />
+        <GameLogs playerId={playerId} stat={stat} overUnder={overUnder} statValue={statValue} position={player?.position as NFLPosition} />
       )}
+      {playerProjectionArgs && <PlayerProjection {...playerProjectionArgs} stat={stat} />}
     </Group>
   );
+}
+
+// only load player projections if player and game info are available and valid
+function getPlayerProjectionArgs(player: Partial<Player> | null, gameInfo: NFLGame) {
+  if (!player?.name || !gameInfo || !gameInfo.homeId || !gameInfo.homeKey || !gameInfo.awayKey) {
+    return null;
+  }
+  const isHome = player.teamId === gameInfo?.homeId;
+  return {
+    playerName: player.name,
+    isHome: isHome,
+    oppKey: isHome ? gameInfo.awayKey : gameInfo.homeKey
+  };
 }
 
 function getDefaultStatPerPosition(position: NFLPosition) {

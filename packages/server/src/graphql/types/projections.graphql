@@ -33,3 +33,34 @@ type ReceivingProjections {
   targets: Float
   yardsPerCatch: Float
 }
+
+query updateProjections($homeTeamId: String!, $awayTeamId: String!) {
+  result: updateProjectionsModel(homeTeamId: $homeTeamId, awayTeamId: $awayTeamId)
+}
+
+query playerProjection($playerName: String!, $isHome: Boolean!, $oppKey: String!) {
+  playerProjection(playerName: $playerName, isHome: $isHome, oppKey: $oppKey) {
+    playerName
+    passing {
+      yards
+      touchdowns
+      attempts
+      completions
+      interceptions
+      yardsPerPass
+    }
+    rushing {
+      yards
+      touchdowns
+      carries
+      yardsPerCarry
+    }
+    receiving {
+      yards
+      touchdowns
+      receptions
+      targets
+      yardsPerCatch
+    }
+  }
+}

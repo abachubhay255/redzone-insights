@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { ParlayGame, ParlayGameType } from "./ParlayGame";
 import { useDisclosure } from "@mantine/hooks";
-import { ActionIcon, Button, Card, Center, Group, Modal, Stack, Title } from "@mantine/core";
+import { ActionIcon, Button, Card, Modal, Stack, Title } from "@mantine/core";
 import { GameSelect, NFLGame } from "#s/components/GameSelect";
 import { IconTrash } from "@tabler/icons-react";
 import { ParlayLegType } from "./ParlayLeg";

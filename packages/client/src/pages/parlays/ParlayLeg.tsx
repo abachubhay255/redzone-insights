@@ -1,8 +1,8 @@
 import { NFLGame } from "#s/components/GameSelect";
 import { GetPlayersByTeamBasicDocument, PassingStats, ReceivingStats, RushingStats } from "#s/graphql/types-and-documents";
 import { useGraphQL } from "#s/graphql/useGraphQL";
-import { Avatar, Card, Group, NumberInput, SegmentedControl, Select, SelectProps } from "@mantine/core";
-import { get, keyBy } from "lodash";
+import { Avatar, Group, NumberInput, SegmentedControl, Select, SelectProps } from "@mantine/core";
+import { keyBy } from "lodash";
 import { useMemo } from "react";
 import { GameLogs, NFLPosition } from "./GameLogs";
 import { isNFLPasser, isNFLReceiver, isNFLRusher } from "../utils";

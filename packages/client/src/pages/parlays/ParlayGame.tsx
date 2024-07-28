@@ -1,5 +1,5 @@
 import { NFLGame } from "#s/components/GameSelect";
-import { ActionIcon, Box, Button, Card, Grid, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, Button, Card, Group, Image, Stack, Text, Title } from "@mantine/core";
 import { ParlayLeg, ParlayLegType } from "./ParlayLeg";
 import { formatGameDay, formatGameTime, formatRecord } from "../utils";
 import { v4 } from "uuid";

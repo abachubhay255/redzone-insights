@@ -29,6 +29,7 @@
   "author": "Akhil Bachubhay",
   "license": "UNLICENSED",
   "dependencies": {
+    "@azure/storage-blob": "^12.24.0",
     "@graphql-tools/graphql-file-loader": "^8.0.1",
     "@graphql-tools/load": "^8.0.2",
     "@graphql-tools/utils": "^10.3.2",

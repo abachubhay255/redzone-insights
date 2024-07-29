@@ -27,13 +27,20 @@ jobs:
           yarn set version 4.2.2
           yarn config set nodeLinker node-modules
 
-      - name: yarn install and build
+      - name: yarn install server and build
         run: |
-          yarn
+          yarn install
           yarn run server-build
+      - name: copy build output to out dir
+        run: |
+          mkdir -p out
+          cp -r packages/server/dist out/
+          cp -r node_modules out/
+          cp packages/server/package.json out/
+          cp yarn.lock out/
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip release.zip ./out/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -72,5 +79,5 @@ jobs:
         with:
           app-name: 'server-redzone-insights'
           slot-name: 'Production'
-          package: ./packages/server/dist
+          package: .
           

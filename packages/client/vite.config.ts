@@ -5,7 +5,6 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [...react(), tsconfigPaths()] as PluginOption[],
-  publicDir: mode === "development" ? "public" : false,
   define: {
     "process.env": process?.env ?? {}
   },
@@ -18,5 +17,9 @@ export default defineConfig(({ mode }) => ({
     watch: {
       usePolling: true
     }
+  },
+  build: {
+    outDir: "build",
+    manifest: true
   }
 }));

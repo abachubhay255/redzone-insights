@@ -1,12 +1,14 @@
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { loadSchema } from "@graphql-tools/load";
 import cors from "cors";
-import express from "express";
+import express, { RequestHandler, Response } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { ruruHTML } from "ruru/server";
 import { resolvers } from "./graphql/resolvers/resolvers.js";
 import { getAssistant } from "./openai.js";
 import { readCache, writeCache } from "./cache.js";
+import { readFile } from "fs/promises";
+import mimeTypes from "mime-types";
 
 export const assistant = await getAssistant();
 
@@ -64,6 +66,8 @@ app.use("/graphql", async (req, res, next) => {
   graphqlHandler(req, res, next);
 });
 
+app.use(serveIndex("client"));
+
 const port = process.env.PORT || 4000;
 
 // Start the server at port
@@ -71,3 +75,33 @@ app.listen(port);
 console.log(`Running a GraphQL API server at http://localhost:${port}/graphql`);
 
 console.log(`Running a GraphiQL API server at http://localhost:${port}/playground`);
+
+function serveIndex(root: string): RequestHandler {
+  return async (req, res) => {
+    const url = new URL("../" + root + "/index.html", import.meta.url);
+
+    try {
+      const contents = await readFile(url);
+      setContentType(res, url);
+      res.set("Cache-Control", "max-age:300, private");
+      res.writeHead(200);
+      res.end(contents);
+    } catch (e) {
+      console.log("serveIndex", "error", e);
+      res.writeHead(404);
+      res.end();
+    }
+  };
+}
+
+function setContentType(res: Response, url: URL) {
+  const type = mimeTypes.lookup(url.href);
+  if (!type) {
+    return;
+  }
+  const contentType = mimeTypes.contentType(type);
+  if (!contentType) {
+    return;
+  }
+  res.setHeader("Content-Type", contentType);
+}

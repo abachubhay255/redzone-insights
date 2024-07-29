@@ -40,6 +40,11 @@ jobs:
           cp packages/server/package.json out/
           cp yarn.lock out/
 
+      - name: client build and copy
+        run: |
+          yarn run client-build
+          cp -r packages/client/build out/dist/client
+
       - name: Zip artifact for deployment
         run: |
           cd out

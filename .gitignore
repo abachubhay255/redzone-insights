@@ -18,6 +18,8 @@ packages/server/tsconfig.tsbuildinfo
 
 # vite
 
+build/
+
 # Logs
 logs
 *.log

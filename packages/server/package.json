@@ -42,6 +42,7 @@
     "graphql-config": "^5.0.3",
     "graphql-http": "^1.22.1",
     "lodash": "^4.17.21",
+    "mime-types": "^2.1.35",
     "openai": "^4.52.7",
     "ruru": "^2.0.0-beta.13",
     "tmp": "^0.2.3"
@@ -53,6 +54,7 @@
     "@types/express": "^4.17.21",
     "@types/graphql": "^14.5.0",
     "@types/lodash": "^4",
+    "@types/mime-types": "^2",
     "@types/node": "^20.14.10",
     "@types/tmp": "^0",
     "nodemon": "^3.1.4",

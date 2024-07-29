@@ -17,10 +17,7 @@
     "delay": 50
   },
   "imports": {
-    "#s/*": {
-      "development": "./dist/*",
-      "default": "./src/*"
-    }
+    "#s/*": "./dist/*"
   },
   "scripts": {
     "build": "tsc",

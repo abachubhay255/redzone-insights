@@ -41,7 +41,9 @@ jobs:
           cp yarn.lock out/
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip out
+        run: |
+        cd out
+        zip -r ../release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -82,4 +84,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: "server-redzone-insights"
-          package: .
+          package: release.zip

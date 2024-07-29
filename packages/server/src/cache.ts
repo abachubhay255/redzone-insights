@@ -2,12 +2,14 @@ import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
 
-const __dirname = import.meta.dirname;
+// Use a workaround to get __dirname in ESM
+import { fileURLToPath } from "url";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const cacheDir = path.resolve(__dirname, "cache");
 
 // Ensure cache directory exists
-fs.mkdir(cacheDir, { recursive: true });
+await fs.mkdir(cacheDir, { recursive: true });
 
 const normalizeQuery = (query: string): string => {
   return query

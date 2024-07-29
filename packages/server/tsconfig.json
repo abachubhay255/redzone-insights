@@ -12,7 +12,7 @@
     "declarationMap": true,
     "composite": true
   },
-  "include": ["src/**/*.ts", "src/**/*.json"],
+  "include": ["src/**/*.ts", "src/**/*.json", "src/**/*.graphql"],
   "ts-node": {
     "esm": true
   }

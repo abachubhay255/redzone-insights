@@ -12,6 +12,7 @@
     "client-tsc": "yarn workspace client tsc",
     "server": "yarn workspace server dev",
     "server-build": "yarn workspace server build",
+    "server-copy-graphql": "yarn workspace server copy-graphql",
     "generate": "graphql-codegen-esm --config codegen.ts"
   },
   "devDependencies": {

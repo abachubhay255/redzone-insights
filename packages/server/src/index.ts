@@ -78,7 +78,7 @@ console.log(`Running a GraphiQL API server at http://localhost:${port}/playgroun
 
 function serveIndex(root: string): RequestHandler {
   return async (req, res) => {
-    const url = new URL("../" + root + "/index.html", import.meta.url);
+    const url = new URL(root + "/index.html", import.meta.url);
 
     try {
       const contents = await readFile(url);

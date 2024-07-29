@@ -78,6 +78,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'server-redzone-insights'
-          slot-name: 'Production'
           package: ./out
           

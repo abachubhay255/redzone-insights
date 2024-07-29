@@ -1,50 +1,62 @@
 import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
-
-// Use a workaround to get __dirname in ESM
 import { fileURLToPath } from "url";
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const cacheDir = path.resolve(__dirname, "cache");
 
-// Ensure cache directory exists
-await fs.mkdir(cacheDir, { recursive: true });
-
-const normalizeQuery = (query: string): string => {
-  return query
-    .replace(/\s+/g, " ") // Replace multiple whitespace characters with a single space
-    .trim(); // Remove leading and trailing whitespace
-};
-
-const getCacheKey = (query: string): string => {
-  const normalizedQuery = normalizeQuery(query);
-  const hash = crypto.createHash("md5").update(normalizedQuery).digest("hex");
-  return path.join(cacheDir, hash + ".json");
-};
-
-export const readCache = async (query: string): Promise<any | null> => {
-  const cacheKey = getCacheKey(query);
+const initializeCache = async () => {
   try {
-    const data = await fs.readFile(cacheKey, "utf-8");
-    const lastModified = await fs.stat(cacheKey).then(stat => stat.mtime);
-    const now = new Date();
-    if (now.getTime() - lastModified.getTime() > TTL) {
-      await fs.unlink(cacheKey);
+    console.log(`Attempting to create cache directory: ${cacheDir}`);
+    await fs.mkdir(cacheDir, { recursive: true });
+    console.log(`Cache directory created: ${cacheDir}`);
+  } catch (err) {
+    console.error(`Error creating cache directory: ${err.message}`);
+    throw err;
+  }
+
+  const normalizeQuery = (query: string): string => {
+    return query
+      .replace(/\s+/g, " ") // Replace multiple whitespace characters with a single space
+      .trim(); // Remove leading and trailing whitespace
+  };
+
+  const getCacheKey = (query: string): string => {
+    const normalizedQuery = normalizeQuery(query);
+    const hash = crypto.createHash("md5").update(normalizedQuery).digest("hex");
+    return path.join(cacheDir, hash + ".json");
+  };
+
+  const readCache = async (query: string): Promise<any | null> => {
+    const cacheKey = getCacheKey(query);
+    try {
+      const data = await fs.readFile(cacheKey, "utf-8");
+      const lastModified = await fs.stat(cacheKey).then(stat => stat.mtime);
+      const now = new Date();
+      if (now.getTime() - lastModified.getTime() > TTL) {
+        await fs.unlink(cacheKey);
+        return null;
+      }
+      return JSON.parse(data);
+    } catch (err) {
       return null;
     }
-    return JSON.parse(data);
-  } catch (err) {
-    return null;
-  }
+  };
+
+  const writeCache = async (query: string, result: any): Promise<void> => {
+    const cacheKey = getCacheKey(query);
+    if (result.errors || result.error || result.data?.__schema) {
+      return;
+    }
+    await fs.writeFile(cacheKey, JSON.stringify(result), "utf-8");
+  };
+
+  const TTL = 1000 * 60 * 60 * 24; // Cache for 24 hours
+
+  return { readCache, writeCache };
 };
 
-export const writeCache = async (query: string, result: any): Promise<void> => {
-  const cacheKey = getCacheKey(query);
-  if (result.errors || result.error || result.data?.__schema) {
-    return;
-  }
-  await fs.writeFile(cacheKey, JSON.stringify(result), "utf-8");
-};
-
-const TTL = 1000 * 60 * 60 * 24; // Cache for 24 hours
+// Initialize the cache and export the methods
+const cache = await initializeCache();
+export const { readCache, writeCache } = cache;

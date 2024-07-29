@@ -41,7 +41,7 @@ jobs:
           cp yarn.lock out/
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./out/* -r
+        run: zip -r release.zip out
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -74,9 +74,12 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9E6C05BEA1794C619322558E277DF714 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_18AEBEBC26824A6797BE9FAC9DE7E270 }}
 
+      - name: Log Where Am I
+        run: ls -la
+
       - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: "server-redzone-insights"
-          package: ./out
+          package: .

@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
+          cache: 'yarn'
 
       - name: Set up Yarn
         run: |
@@ -29,7 +30,7 @@ jobs:
 
       - name: yarn install server and build
         run: |
-          yarn install
+          yarn install --immutable
           yarn run server-build
       - name: copy build output to out dir
         run: |

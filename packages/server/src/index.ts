@@ -64,8 +64,10 @@ app.use("/graphql", async (req, res, next) => {
   graphqlHandler(req, res, next);
 });
 
-// Start the server at port
-app.listen(4000);
-console.log("Running a GraphQL API server at http://localhost:4000/graphql");
+const port = process.env.PORT || 4000;
 
-console.log("Running a GraphiQL API server at http://localhost:4000/playground");
+// Start the server at port
+app.listen(port);
+console.log(`Running a GraphQL API server at http://localhost:${port}/graphql`);
+
+console.log(`Running a GraphiQL API server at http://localhost:${port}/playground`);

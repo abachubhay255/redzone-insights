@@ -11,7 +11,7 @@ export function useGraphQL<TResult, TVariables>(
     queryKey: [document, variables],
     queryFn: async () =>
       request(
-        "/api",
+        "/graphql",
         document,
         // variables are type-checked too!
         variables as Variables,

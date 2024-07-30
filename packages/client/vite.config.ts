@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
     host: "localhost",
     port: parseInt(process?.env?.VITE_PORT ?? "3000"),
     proxy: {
-      "/api": "http://localhost:4000/graphql"
+      "/graphql": "http://localhost:4000/graphql"
     },
     watch: {
       usePolling: true

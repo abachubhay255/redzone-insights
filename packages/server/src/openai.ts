@@ -1,9 +1,8 @@
-import OpenAI from "openai";
+import OpenAI, { toFile } from "openai";
 import "dotenv/config";
-import fs from "fs";
-import fsProm from "fs/promises";
-
+import { Buffer } from "buffer";
 import { assistant } from "./index.js";
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
@@ -18,31 +17,25 @@ export async function getVectorStore() {
   return vectorStore;
 }
 
-async function createTempJsonFile(obj: any, filename: string): Promise<string> {
-  await fsProm.writeFile(filename, JSON.stringify(obj));
-  return filename;
+async function createTempJsonBuffer(obj: any): Promise<Buffer> {
+  const jsonString = JSON.stringify(obj);
+  return Buffer.from(jsonString);
 }
 
 export async function uploadFiles(objects: any[], filenames: string[]) {
-  const filePaths: string[] = []; // Array to store temporary file paths
   let err = "";
   try {
     const vectorStore = await getVectorStore();
-
     const storageFiles = await openai.files.list();
-
     const filesToUpdate = new Set<string>(filenames);
+    const oneDayAgo = Math.floor(Date.now() / 1000) - ONE_DAY_SECONDS;
 
     // if the file is less than 1 day old it doesn't need to be updated, if older than 1 day delete it from the vector store
     for (const file of storageFiles.data) {
-      // check if file is older than 1 day
-      const oneDayAgo = Math.floor(Date.now() / 1000) - ONE_DAY_SECONDS;
       if (file.created_at < oneDayAgo) {
         console.log("Deleting old file: ", file.filename, file.id);
         await openai.files.del(file.id);
-      }
-      // file is already up to date
-      else {
+      } else {
         filesToUpdate.delete(file.filename);
       }
     }
@@ -54,31 +47,31 @@ export async function uploadFiles(objects: any[], filenames: string[]) {
       return "success";
     }
 
-    // Create temporary JSON files for each object asynchronously
-    for (let i = 0; i < objects.length; i++) {
-      if (!filesToUpdate.has(filenames[i])) {
-        continue;
-      }
-      const tempFilePath = await createTempJsonFile(objects[i], filenames[i]);
-      filePaths.push(tempFilePath);
-    }
+    // Create in-memory buffers for each object asynchronously
+    const buffers = await Promise.all(
+      objects.map((obj, i) => {
+        if (!filesToUpdate.has(filenames[i])) {
+          return null;
+        }
+        return createTempJsonBuffer(obj);
+      })
+    );
 
-    // Create read streams for the temporary files
-    const fileStreams = filePaths.map(path => fs.createReadStream(path));
+    const filesToUpload = buffers
+      .filter((buf): buf is Buffer => buf !== null)
+      .map((buf, i) => ({
+        filename: filenames[i],
+        buffer: buf
+      }));
 
     // Upload files to OpenAI Vector Store with progress tracking
-    await openai.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, { files: fileStreams, fileIds: [] });
-
-    // Handle the upload response as needed (e.g., process errors)
+    await openai.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, {
+      files: await Promise.all(filesToUpload.map(async f => await toFile(f.buffer, f.filename))),
+      fileIds: []
+    });
   } catch (error) {
     console.log(error);
-    err = error;
-    // Handle errors appropriately (e.g., clean up temporary files)
-  } finally {
-    // Delete temporary files regardless of success or failure
-    for (const filePath of filePaths) {
-      fs.unlink(filePath, () => {});
-    }
+    err = error.message || error.toString();
   }
 
   return err || "success";

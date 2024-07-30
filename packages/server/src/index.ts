@@ -9,7 +9,7 @@ import { getAssistant } from "./openai.js";
 import { readCache, writeCache } from "./cache.js";
 import { readFile } from "fs/promises";
 import mimeTypes from "mime-types";
-import path from "path";
+import parseUrl from "parseurl";
 
 export const assistant = await getAssistant();
 
@@ -67,7 +67,8 @@ app.use("/graphql", async (req, res, next) => {
   graphqlHandler(req, res, next);
 });
 
-app.use(serveStaticFiles("client"));
+app.use("/assets", serveAssets("client"));
+app.use(serveIndex("client"));
 
 const port = process.env.PORT || 4000;
 
@@ -77,35 +78,51 @@ console.log(`Running a GraphQL API server at http://localhost:${port}/graphql`);
 
 console.log(`Running a GraphiQL API server at http://localhost:${port}/playground`);
 
-// Function to serve static files with correct MIME types
-function serveStaticFiles(root: string): RequestHandler {
-  return async (req, res, next) => {
-    const filePath = path.join(process.cwd(), root, req.path === "/" ? "index.html" : req.path);
+function serveIndex(root: string): RequestHandler {
+  return async (req, res) => {
+    const url = new URL(root + "/index.html", import.meta.url);
+
     try {
-      const contents = await readFile(filePath);
-      setContentType(res, filePath);
+      const contents = await readFile(url);
+      setContentType(res, url);
       res.set("Cache-Control", "max-age:300, private");
       res.writeHead(200);
       res.end(contents);
     } catch (e) {
-      if (e.code === "ENOENT") {
-        next(); // Let Express handle 404
-      } else {
-        console.error("Error serving static file:", e);
-        res.writeHead(500);
-        res.end();
-      }
+      console.log("serveIndex", "error", e);
+      res.writeHead(404);
+      res.end();
     }
   };
 }
 
-// Function to set the correct content type based on file extension
-function setContentType(res: Response, filePath: string) {
-  const type = mimeTypes.lookup(filePath);
-  if (type) {
-    const contentType = mimeTypes.contentType(type);
-    if (contentType) {
-      res.setHeader("Content-Type", contentType);
+function serveAssets(root: string, assetsPrefix = "assets"): RequestHandler {
+  return async (req, res) => {
+    const path = parseUrl(req)?.pathname;
+    const url = new URL(root + "/" + assetsPrefix + path, import.meta.url);
+
+    try {
+      const contents = await readFile(url);
+      setContentType(res, url);
+      res.set("Cache-Control", "max-age:31536000, immutable");
+      res.writeHead(200);
+      res.end(contents);
+    } catch (e) {
+      console.log("serveAssets", "error", e);
+      res.writeHead(404);
+      res.end();
     }
+  };
+}
+
+function setContentType(res: Response, url: URL) {
+  const type = mimeTypes.lookup(url.href);
+  if (!type) {
+    return;
   }
+  const contentType = mimeTypes.contentType(type);
+  if (!contentType) {
+    return;
+  }
+  res.setHeader("Content-Type", contentType);
 }

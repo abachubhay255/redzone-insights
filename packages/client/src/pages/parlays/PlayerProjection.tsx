@@ -45,7 +45,7 @@ export function PlayerProjection({ playerName, isHome, oppKey, stat }: Props) {
     >
       <Card bg="dark" withBorder p={5} w={175}>
         <Text ta="center" fw={500}>
-          {projection} {name}
+          {projection || 0} {name || "yards"}
         </Text>
       </Card>
     </Indicator>

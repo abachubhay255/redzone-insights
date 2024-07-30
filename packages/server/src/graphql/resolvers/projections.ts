@@ -4,6 +4,7 @@ import { playerGameLogs } from "./gameLogs.js";
 import { playersByTeam } from "./players.js";
 import { parseJsonResponse, ToFilename } from "./utils.js";
 import { teams } from "./teams.js";
+import { PlayerProjection } from "../resolvers-types.js";
 
 type ProjectionsProps = {
   homeTeamId: string;
@@ -58,6 +59,9 @@ export async function playerProjection({ playerName, isHome, oppKey }: PlayerPro
   if (!response) {
     throw new Error("No response from OpenAI API");
   }
-  const projection = parseJsonResponse(response ?? "");
+  const projection: PlayerProjection = parseJsonResponse(response ?? "");
+  if (!projection || (!projection.passing && !projection.rushing && !projection.receiving)) {
+    throw new Error("No projection data");
+  }
   return projection;
 }

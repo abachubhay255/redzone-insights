@@ -36,9 +36,9 @@ const getCacheKey = (query: string): string => {
   return `${hash}.json`;
 };
 
-const TTL = 1000 * 60 * 60 * 24; // Cache for 24 hours
+const TTL = 1000 * 60 * 60; // Cache for 1 hour
 
-export const readCache = async (query: string): Promise<any | null> => {
+export const readCache = async (query: string, ttl?: number): Promise<any | null> => {
   const cacheKey = getCacheKey(query);
   const blockBlobClient = containerClient.getBlockBlobClient(cacheKey);
 
@@ -47,7 +47,7 @@ export const readCache = async (query: string): Promise<any | null> => {
     const lastModified = properties.lastModified;
     const now = new Date();
 
-    if (lastModified && now.getTime() - lastModified.getTime() > TTL) {
+    if (lastModified && now.getTime() - lastModified.getTime() > (ttl ?? TTL)) {
       await blockBlobClient.delete();
       return null;
     }

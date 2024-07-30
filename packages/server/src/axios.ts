@@ -14,7 +14,13 @@ export const getNFL = Axios.create({
 
 export async function getNFLData(uri: string, params: any) {
   const query = uri + JSON.stringify(params);
-  const cachedResponse = await readCache(query);
+  let ttl = TTL;
+  const nflStartDate = new Date("Thu, Sep 5, 2024"); // update this date every year or automate it
+  const nflEndDate = new Date("Sun, Feb 9, 2025");
+  if (new Date() < nflStartDate || new Date() > nflEndDate) {
+    ttl = 1000 * 60 * 60 * 24 * 3; // Cache for 3 days
+  }
+  const cachedResponse = await readCache(query, ttl);
   if (cachedResponse) {
     return cachedResponse;
   }
@@ -31,6 +37,8 @@ export async function getNFLData(uri: string, params: any) {
     throw error;
   }
 }
+
+const TTL = 1000 * 60 * 60 * 24; // Cache for 24 hours
 
 // const ODDS_KEY = config.ODDS_API_KEY;
 

@@ -17,14 +17,20 @@ const schema = await loadSchema("./**/types/*.graphql", {
   loaders: [new GraphQLFileLoader()]
 });
 
+const port = process.env.PORT || 4000;
+
 const app = express();
 app.use(cors());
 
-// Serve the GraphiQL IDE.
-app.get("/playground", (_req, res) => {
-  res.type("html");
-  res.end(ruruHTML({ endpoint: "/graphql" }));
-});
+if (process.env.PLAYGROUND === "true") {
+  // Serve the GraphiQL IDE.
+  app.get("/playground", (_req, res) => {
+    res.type("html");
+    res.end(ruruHTML({ endpoint: "/graphql" }));
+  });
+
+  console.log(`Running a GraphiQL API server at http://localhost:${port}/playground`);
+}
 
 app.use(express.json());
 
@@ -70,13 +76,9 @@ app.use("/graphql", async (req, res, next) => {
 app.use("/assets", serveAssets("client"));
 app.use(serveIndex("client"));
 
-const port = process.env.PORT || 4000;
-
 // Start the server at port
 app.listen(port);
 console.log(`Running a GraphQL API server at http://localhost:${port}/graphql`);
-
-console.log(`Running a GraphiQL API server at http://localhost:${port}/playground`);
 
 function serveIndex(root: string): RequestHandler {
   return async (req, res) => {

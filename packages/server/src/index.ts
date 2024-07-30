@@ -10,6 +10,7 @@ import { readCache, writeCache } from "./cache.js";
 import { readFile } from "fs/promises";
 import mimeTypes from "mime-types";
 import parseUrl from "parseurl";
+import { rateLimit } from "express-rate-limit";
 
 export const assistant = await getAssistant();
 
@@ -33,6 +34,16 @@ if (process.env.PLAYGROUND === "true") {
 }
 
 app.use(express.json());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: "draft-7",
+  legacyHeaders: false
+});
+
+// Apply the rate limiting middleware to all requests.
+app.use(limiter);
 
 app.use("/graphql", async (req, res, next) => {
   // Proceed with graphql-http handler

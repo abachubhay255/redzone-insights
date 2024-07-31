@@ -52,7 +52,7 @@ export function Scores() {
       <Stack>
         {scores.map(score => (
           <Group key={score?.gameId} gap={0} justify="center" align="center">
-            <Card w={{ base: "50%", sm: "75%" }} h={CARD_HEIGHT}>
+            <Card w={{ base: "50%", sm: "75%" }} h={{ base: CARD_HEIGHT, sm: CARD_HEIGHT + 25 }}>
               <Group justify="space-between">
                 <Group>
                   <Image
@@ -64,7 +64,7 @@ export function Scores() {
                   />
                   <Title order={2}>{getTeamName(score?.awayId, score?.awayKey)}</Title>
                 </Group>
-                <Title>{getTeamScore(score?.awayPts, score?.gameStatus, score?.awayId)}</Title>
+                <Title order={2}>{getTeamScore(score?.awayPts, score?.gameStatus, score?.awayId)}</Title>
               </Group>
               <Group justify="space-between">
                 <Group>
@@ -77,10 +77,10 @@ export function Scores() {
                   />
                   <Title order={2}>{getTeamName(score?.homeId, score?.homeKey)}</Title>
                 </Group>
-                <Title>{getTeamScore(score?.homePts, score?.gameStatus, score?.homeId)}</Title>
+                <Title order={2}>{getTeamScore(score?.homePts, score?.gameStatus, score?.homeId)}</Title>
               </Group>
             </Card>
-            <Card bg="dark" h={CARD_HEIGHT} component={Center}>
+            <Card bg="dark" h={{ base: CARD_HEIGHT, sm: CARD_HEIGHT + 25 }} component={Center}>
               <Title order={4}>{score?.gameClock || score?.gameStatus}</Title>
               <Title order={5} c="dimmed">
                 {formatGameDay(score?.gameEpoch)}
@@ -96,4 +96,4 @@ export function Scores() {
   );
 }
 
-const CARD_HEIGHT = 125;
+const CARD_HEIGHT = 100;

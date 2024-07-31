@@ -49,23 +49,23 @@ export function GameSelect({ close, setGame, selectedGameIds }: Props) {
           }}
           className={classes.game}
         >
-          <Card w={{ base: "50%", sm: "75%" }} h={CARD_HEIGHT}>
+          <Card w={{ base: "100%", sm: "75%" }} h={CARD_HEIGHT}>
             <Group justify="space-between">
               <Group>
-                <Image visibleFrom="sm" h={50} w={50} src={teamsById[score?.awayId ?? ""]?.logo} alt={score?.awayKey || "Unknown"} />
+                <Image h={50} w={50} src={teamsById[score?.awayId ?? ""]?.logo} alt={score?.awayKey || "Unknown"} />
                 <Title order={2}>{score?.awayKey || "Unknown"}</Title>
               </Group>
-              <Title>{getTeamScore(score?.awayPts, score?.gameStatus, score?.awayId)}</Title>
+              <Title order={2}>{getTeamScore(score?.awayPts, score?.gameStatus, score?.awayId)}</Title>
             </Group>
             <Group justify="space-between">
               <Group>
-                <Image visibleFrom="sm" h={50} w={50} src={teamsById[score?.homeId ?? ""]?.logo} alt={score?.homeKey || "Unknown"} />
+                <Image h={50} w={50} src={teamsById[score?.homeId ?? ""]?.logo} alt={score?.homeKey || "Unknown"} />
                 <Title order={2}>{score?.homeKey || "Unknown"}</Title>
               </Group>
-              <Title>{getTeamScore(score?.homePts, score?.gameStatus, score?.homeId)}</Title>
+              <Title order={2}>{getTeamScore(score?.homePts, score?.gameStatus, score?.homeId)}</Title>
             </Group>
           </Card>
-          <Card bg="dark" h={CARD_HEIGHT} component={Center}>
+          <Card w={{ base: "100%", sm: "25%" }} bg="dark" h={{ base: 100, sm: CARD_HEIGHT }} component={Center}>
             <Title order={4}>{score?.gameClock || score?.gameStatus}</Title>
             <Title order={5} c="dimmed">
               {formatGameDay(score?.gameEpoch)}

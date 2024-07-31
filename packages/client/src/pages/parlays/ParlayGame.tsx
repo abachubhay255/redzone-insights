@@ -73,7 +73,7 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
   return (
     <>
       <Card.Section withBorder inheritPadding py="xs">
-        <Group justify="space-evenly">
+        <Group justify="space-evenly" mr="xl">
           {!isMobile && (
             <Group>
               <Image h={50} src={teamsById[gameInfo?.awayId ?? ""]?.logo} alt={getTeamName(gameInfo?.awayId, gameInfo?.awayKey)} />{" "}
@@ -103,8 +103,8 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
             <ActionIcon
               title="Delete Leg"
               pos="absolute"
-              top={10}
-              right={10}
+              bottom={5}
+              right={5}
               size="lg"
               variant="light"
               color="red"

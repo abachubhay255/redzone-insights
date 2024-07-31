@@ -12,12 +12,13 @@ export type NFLGame = NonNullable<GetScoresQuery["nflScoresWeekly"]>[0];
 type Props = {
   close: () => void;
   setGame: (game: NFLGame) => void;
+  selectedGameIds: Set<string>;
 };
 
-export function GameSelect({ close, setGame }: Props) {
+export function GameSelect({ close, setGame, selectedGameIds }: Props) {
   const { data, isLoading } = useGraphQL(GetScoresDocument, { week: getNFLWeek(new Date()) });
 
-  const scores = useMemo(() => data?.nflScoresWeekly ?? [], [data]);
+  const scores = useMemo(() => data?.nflScoresWeekly?.filter(score => !selectedGameIds.has(score?.gameId ?? "")) ?? [], [data]);
 
   const { data: teams, isLoading: teamsLoading } = useGraphQL(GetTeamsWithoutStatsDocument, {});
 

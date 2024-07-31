@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ParlayGame, ParlayGameType } from "./ParlayGame";
 import { useDisclosure } from "@mantine/hooks";
 import { ActionIcon, Button, Card, Modal, Stack, Title } from "@mantine/core";
@@ -9,22 +9,20 @@ import { ParlayLegType } from "./ParlayLeg";
 export function Parlays() {
   const [parlayGames, setParlayGames] = useState<ParlayGameType[]>([]);
 
-  console.log(parlayGames);
-
   const [opened, { open, close }] = useDisclosure(false);
 
   const addGame = useCallback(
     (game: NFLGame) => {
       setParlayGames([...parlayGames, { gameInfo: game, parlayLegs: [] }]);
     },
-    [parlayGames]
+    [parlayGames, setParlayGames]
   );
 
   const deleteGame = useCallback(
     (gameId?: string | null) => {
       setParlayGames(parlayGames.filter(game => game.gameInfo?.gameId !== gameId));
     },
-    [parlayGames]
+    [parlayGames, setParlayGames]
   );
 
   const updateParlayLegs = useCallback(
@@ -38,8 +36,10 @@ export function Parlays() {
         })
       );
     },
-    [parlayGames]
+    [parlayGames, setParlayGames]
   );
+
+  const selectedGameIds = useMemo(() => new Set(parlayGames.map(game => game.gameInfo?.gameId ?? "")), [parlayGames]);
 
   return (
     <Card>
@@ -80,7 +80,7 @@ export function Parlays() {
           </Card>
         ))}
         <Modal size={"xl"} opened={opened} onClose={close} title="Select Game">
-          <GameSelect close={close} setGame={addGame} />
+          <GameSelect close={close} setGame={addGame} selectedGameIds={selectedGameIds} />
         </Modal>
         {parlayGames.length > 0 && (
           <Button ml="auto" w={125} onClick={open}>

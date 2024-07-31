@@ -41,6 +41,10 @@ export async function updateProjectionsModel({ homeTeamId, awayTeamId }: Project
 
   const response = await uploadFiles(objs, names);
 
+  if (response !== "success") {
+    throw new Error("Failed to update model: " + response);
+  }
+
   console.log("Finished", response);
   return response;
 }

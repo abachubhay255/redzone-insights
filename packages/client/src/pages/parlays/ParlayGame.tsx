@@ -54,20 +54,20 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
 
   const addParlayLeg = useCallback(() => {
     updateParlayLegs([...parlayLegs, { id: v4(), ...newParlayLeg }]);
-  }, [parlayLegs]);
+  }, [parlayLegs, updateParlayLegs]);
 
   const deleteParlayLeg = useCallback(
     (legId: string) => {
       updateParlayLegs(parlayLegs.filter(leg => leg.id !== legId));
     },
-    [parlayLegs]
+    [parlayLegs, updateParlayLegs]
   );
 
   const updateParlayLeg = useCallback(
     (legId: string, leg: Partial<ParlayLegType>) => {
       updateParlayLegs(parlayLegs.map(l => (l.id === legId ? { ...l, ...leg } : l)));
     },
-    [parlayLegs]
+    [parlayLegs, updateParlayLegs]
   );
 
   return (

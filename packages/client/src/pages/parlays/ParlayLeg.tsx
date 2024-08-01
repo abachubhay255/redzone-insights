@@ -1,5 +1,4 @@
-import { NFLGame } from "#s/components/GameSelect";
-import { GetPlayersByTeamBasicDocument, PassingStats, Player, ReceivingStats, RushingStats } from "#s/graphql/types-and-documents";
+import { GetPlayersByTeamBasicDocument, PassingStats, Player, ReceivingStats, RushingStats, Team } from "#s/graphql/types-and-documents";
 import { useGraphQL } from "#s/graphql/useGraphQL";
 import { Avatar, Group, NumberInput, SegmentedControl, Select, SelectProps } from "@mantine/core";
 import { keyBy } from "lodash";
@@ -24,15 +23,16 @@ export type ParlayLegType = {
 };
 
 type Props = ParlayLegType & {
-  gameInfo: NFLGame;
+  homeTeam: Team;
+  awayTeam: Team;
   updateParlayLeg: (leg: Partial<ParlayLegType>) => void;
   projectionsUpToDate: boolean;
 };
 
-export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, gameInfo, updateParlayLeg, projectionsUpToDate }: Props) {
-  const { data: awayData } = useGraphQL(GetPlayersByTeamBasicDocument, { teamId: gameInfo?.awayId ?? "" });
+export function ParlayLeg({ homeTeam, awayTeam, playerId, overUnder, stat, statValue, updateParlayLeg, projectionsUpToDate }: Props) {
+  const { data: awayData } = useGraphQL(GetPlayersByTeamBasicDocument, { teamId: awayTeam?.id ?? "" });
 
-  const { data: homeData } = useGraphQL(GetPlayersByTeamBasicDocument, { teamId: gameInfo?.homeId ?? "" });
+  const { data: homeData } = useGraphQL(GetPlayersByTeamBasicDocument, { teamId: homeTeam.id ?? "" });
 
   const awayPlayers = useMemo(() => awayData?.playersByTeam ?? [], [awayData]);
   const homePlayers = useMemo(() => homeData?.playersByTeam ?? [], [homeData]);
@@ -52,7 +52,7 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
     [awayPlayers, homePlayers]
   );
 
-  const renderSelectOption: SelectProps["renderOption"] = ({ option, checked }) => (
+  const renderSelectOption: SelectProps["renderOption"] = ({ option }) => (
     <Group flex="1" gap="xs">
       <Avatar src={playersById[option.value]?.picture} size="sm" />
       {option.label}
@@ -64,8 +64,8 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
   const statSelectData = useMemo(() => statData.filter(({ group }) => matchedStats.has(group)), [matchedStats]);
 
   const showPlayerProjection = useMemo(
-    () => playerProjectionAvailable(player, gameInfo, projectionsUpToDate),
-    [player, gameInfo, projectionsUpToDate]
+    () => playerProjectionAvailable(player, homeTeam, awayTeam, projectionsUpToDate),
+    [player, homeTeam, awayTeam, projectionsUpToDate]
   );
 
   return (
@@ -116,7 +116,16 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
         onChange={val => updateParlayLeg({ statValue: val as number })}
       />
       {playerId && (
-        <GameLogs playerId={playerId} stat={stat} overUnder={overUnder} statValue={statValue} position={player?.position as NFLPosition} />
+        <GameLogs
+          playerId={playerId}
+          playerTeamId={player?.teamId ?? ""}
+          stat={stat}
+          overUnder={overUnder}
+          statValue={statValue}
+          position={player?.position as NFLPosition}
+          homeTeam={homeTeam}
+          awayTeam={awayTeam}
+        />
       )}
       {showPlayerProjection && <PlayerProjection {...showPlayerProjection} stat={stat} />}
     </Group>
@@ -124,18 +133,18 @@ export function ParlayLeg({ playerId, playerName, overUnder, stat, statValue, ga
 }
 
 // only load player projections if player and game info are available and valid
-function playerProjectionAvailable(player: Partial<Player> | null, gameInfo: NFLGame, projectionsUpToDate: boolean) {
+function playerProjectionAvailable(player: Partial<Player> | null, homeTeam: Team, awayTeam: Team, projectionsUpToDate: boolean) {
   if (!projectionsUpToDate) {
     return null;
   }
-  if (!player?.name || !gameInfo || !gameInfo.homeId || !gameInfo.homeKey || !gameInfo.awayKey) {
+  if (!player?.name || !player.teamId || !homeTeam.id || !homeTeam.key || !awayTeam.key) {
     return null;
   }
-  const isHome = player.teamId === gameInfo?.homeId;
+  const isHome = player.teamId === homeTeam.id;
   return {
     playerName: player.name,
     isHome: isHome,
-    oppKey: isHome ? gameInfo.awayKey : gameInfo.homeKey
+    oppKey: isHome ? awayTeam.key : homeTeam.key
   };
 }
 

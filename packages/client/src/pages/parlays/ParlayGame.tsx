@@ -1,12 +1,12 @@
 import { NFLGame } from "#s/components/GameSelect";
-import { ActionIcon, Box, Button, Card, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, Button, Card, Group, Image, Loader, Stack, Text, Title } from "@mantine/core";
 import { ParlayLeg, ParlayLegType } from "./ParlayLeg";
 import { formatGameDay, formatGameTime, formatRecord } from "../utils";
 import { v4 } from "uuid";
 import { useCallback, useMemo } from "react";
 import { IconAt, IconTrash } from "@tabler/icons-react";
 import { useGraphQL } from "#s/graphql/useGraphQL";
-import { GetTeamsWithoutStatsDocument, UpdateProjectionsDocument } from "#s/graphql/types-and-documents";
+import { GetTeamsWithStatsDocument, UpdateProjectionsDocument } from "#s/graphql/types-and-documents";
 import { useMobile } from "#s/hooks/useMobile";
 import { keyBy } from "lodash";
 
@@ -24,7 +24,7 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
     homeTeamId: gameInfo?.homeId ?? "",
     awayTeamId: gameInfo?.awayId ?? ""
   });
-  const { data: teams } = useGraphQL(GetTeamsWithoutStatsDocument, {});
+  const { data: teams, isLoading } = useGraphQL(GetTeamsWithStatsDocument, {});
 
   const teamsById = useMemo(() => keyBy(teams?.teams, "id"), [teams]);
 
@@ -70,6 +70,10 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
     [parlayLegs, updateParlayLegs]
   );
 
+  if (isLoading) {
+    return <Loader type="dots" />;
+  }
+
   return (
     <>
       <Card.Section withBorder inheritPadding py="xs">
@@ -95,7 +99,8 @@ export function ParlayGame({ gameInfo, parlayLegs, updateParlayLegs }: Props) {
         {parlayLegs.map(leg => (
           <Card p="xs" bg="dark.9" key={leg.id}>
             <ParlayLeg
-              gameInfo={gameInfo}
+              homeTeam={teamsById[gameInfo?.homeId ?? ""] ?? {}}
+              awayTeam={teamsById[gameInfo?.awayId ?? ""] ?? {}}
               updateParlayLeg={l => updateParlayLeg(leg.id, l)}
               {...leg}
               projectionsUpToDate={data?.result === "success"}

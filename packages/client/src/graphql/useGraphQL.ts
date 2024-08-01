@@ -9,14 +9,8 @@ export function useGraphQL<TResult, TVariables>(
 ): UseQueryResult<TResult> {
   return useQuery({
     queryKey: [document, variables],
-    queryFn: async () =>
-      request(
-        "/graphql",
-        document,
-        // variables are type-checked too!
-        variables as Variables,
-        requestHeaders
-      )
+    queryFn: async () => request("/graphql", document, variables as Variables, requestHeaders),
+    staleTime: 1000 * 60 * 5 // 5 minutes
   });
 }
 

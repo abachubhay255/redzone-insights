@@ -29,14 +29,24 @@ export function formatRecord(wins: number, losses: number, ties: number) {
   return `${wins}-${losses}${ties ? `-${ties}` : ""}`;
 }
 
-export function getHitColor(hits: number, total: number) {
+export function getPercentColor(hits: number, total: number, reverse: boolean = false) {
   const hitRate = hits / total;
-  if (hitRate >= 0.66) {
-    return "green";
-  } else if (hitRate >= 0.33) {
-    return "yellow";
+  if (reverse) {
+    if (hitRate >= 2 / 3) {
+      return "red";
+    } else if (hitRate >= 1 / 3) {
+      return "yellow";
+    } else {
+      return "green";
+    }
   } else {
-    return "red";
+    if (hitRate >= 2 / 3) {
+      return "green";
+    } else if (hitRate >= 1 / 3) {
+      return "yellow";
+    } else {
+      return "red";
+    }
   }
 }
 

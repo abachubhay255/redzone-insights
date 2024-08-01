@@ -82,6 +82,10 @@ query GetTeamsWithStats {
       allowedRushTds
       allowedPassYards
       allowedPassTds
+      rushDefenseRank
+      rushOffenseRank
+      passDefenseRank
+      passOffenseRank
     }
   }
 }

@@ -33,6 +33,10 @@ export function PlayerProjection({ playerName, isHome, oppKey, stat }: Props) {
       </Group>
     );
   }
+
+  if (!projection) {
+    return <></>;
+  }
   return (
     <Indicator
       offset={-2}
@@ -45,7 +49,7 @@ export function PlayerProjection({ playerName, isHome, oppKey, stat }: Props) {
     >
       <Card bg="dark" withBorder p={5} w={175}>
         <Text ta="center" fw={500}>
-          {projection || 0} {name || "yards"}
+          {projection} {name || "yards"}
         </Text>
       </Card>
     </Indicator>

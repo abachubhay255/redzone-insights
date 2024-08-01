@@ -44,55 +44,54 @@ export function Scores() {
   );
 
   return (
-    <>
-      <Center mb="md">
+    <Stack>
+      <Center>
         <WeekSelect week={week} setWeek={setWeek} />
       </Center>
       {(isLoading || teamsLoading) && <AppLoader />}
-      <Stack>
-        {scores.map(score => (
-          <Group key={score?.gameId} gap={0} justify="center" align="center">
-            <Card w={{ base: "50%", sm: "75%" }} h={{ base: CARD_HEIGHT, sm: CARD_HEIGHT + 25 }}>
-              <Group justify="space-between">
-                <Group>
-                  <Image
-                    visibleFrom="sm"
-                    h={50}
-                    w={50}
-                    src={teamsById[score?.awayId ?? ""]?.logo}
-                    alt={getTeamName(score?.awayId, score?.awayKey)}
-                  />
-                  <Title order={2}>{getTeamName(score?.awayId, score?.awayKey)}</Title>
-                </Group>
-                <Title order={2}>{getTeamScore(score?.awayPts, score?.gameStatus, score?.awayId)}</Title>
+
+      {scores.map(score => (
+        <Group key={score?.gameId} gap={0}>
+          <Card w={{ base: "50%", sm: "85%" }} h={{ base: CARD_HEIGHT, sm: CARD_HEIGHT + 25 }}>
+            <Group justify="space-between">
+              <Group>
+                <Image
+                  visibleFrom="sm"
+                  h={50}
+                  w={50}
+                  src={teamsById[score?.awayId ?? ""]?.logo}
+                  alt={getTeamName(score?.awayId, score?.awayKey)}
+                />
+                <Title order={2}>{getTeamName(score?.awayId, score?.awayKey)}</Title>
               </Group>
-              <Group justify="space-between">
-                <Group>
-                  <Image
-                    visibleFrom="sm"
-                    h={50}
-                    w={50}
-                    src={teamsById[score?.homeId ?? ""]?.logo}
-                    alt={getTeamName(score?.homeId, score?.homeKey)}
-                  />
-                  <Title order={2}>{getTeamName(score?.homeId, score?.homeKey)}</Title>
-                </Group>
-                <Title order={2}>{getTeamScore(score?.homePts, score?.gameStatus, score?.homeId)}</Title>
+              <Title order={2}>{getTeamScore(score?.awayPts, score?.gameStatus, score?.awayId)}</Title>
+            </Group>
+            <Group justify="space-between">
+              <Group>
+                <Image
+                  visibleFrom="sm"
+                  h={50}
+                  w={50}
+                  src={teamsById[score?.homeId ?? ""]?.logo}
+                  alt={getTeamName(score?.homeId, score?.homeKey)}
+                />
+                <Title order={2}>{getTeamName(score?.homeId, score?.homeKey)}</Title>
               </Group>
-            </Card>
-            <Card bg="dark" h={{ base: CARD_HEIGHT, sm: CARD_HEIGHT + 25 }} component={Center}>
-              <Title order={4}>{score?.gameClock || score?.gameStatus}</Title>
-              <Title order={5} c="dimmed">
-                {formatGameDay(score?.gameEpoch)}
-              </Title>
-              <Title order={5} c="dimmed">
-                {formatGameTime(score?.gameEpoch)}
-              </Title>
-            </Card>
-          </Group>
-        ))}
-      </Stack>
-    </>
+              <Title order={2}>{getTeamScore(score?.homePts, score?.gameStatus, score?.homeId)}</Title>
+            </Group>
+          </Card>
+          <Card bg="dark" h={{ base: CARD_HEIGHT, sm: CARD_HEIGHT + 25 }} component={Center} w={{ base: "50%", sm: "15%" }}>
+            <Title order={4}>{score?.gameClock || score?.gameStatus}</Title>
+            <Title order={5} c="dimmed">
+              {formatGameDay(score?.gameEpoch)}
+            </Title>
+            <Title order={5} c="dimmed">
+              {formatGameTime(score?.gameEpoch)}
+            </Title>
+          </Card>
+        </Group>
+      ))}
+    </Stack>
   );
 }
 

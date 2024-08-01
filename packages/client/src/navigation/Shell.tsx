@@ -18,15 +18,22 @@ export function Shell() {
 
           <Group ml="auto" mr="auto" visibleFrom="sm">
             {pages.map(page => (
-              <HeaderItem key={page.link} link={page.link} label={page.label} active={active === page.link} />
+              <HeaderItem key={page.link} link={page.link} label={page.label} active={active === page.link} indicator={page.indicator} />
             ))}
           </Group>
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar py="md" px={4}>
+      <AppShell.Navbar py="md" px={4} zIndex={500}>
         {pages.map(page => (
-          <HeaderItem key={page.link} link={page.link} label={page.label} active={active === page.link} onClick={toggle} />
+          <HeaderItem
+            key={page.link}
+            link={page.link}
+            label={page.label}
+            active={active === page.link}
+            indicator={page.indicator}
+            onClick={toggle}
+          />
         ))}
       </AppShell.Navbar>
 
@@ -42,5 +49,5 @@ export function Shell() {
 const pages = [
   { link: "/", label: "Scores" },
   { link: "/standings", label: "Standings" },
-  { link: "/parlays", label: "Parlays" }
+  { link: "/parlays", label: "Parlays", indicator: "AI" }
 ];

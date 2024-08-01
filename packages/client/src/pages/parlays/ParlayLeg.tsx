@@ -1,6 +1,6 @@
 import { GetPlayersByTeamBasicDocument, PassingStats, Player, ReceivingStats, RushingStats, Team } from "#s/graphql/types-and-documents";
 import { useGraphQL } from "#s/graphql/useGraphQL";
-import { Avatar, Group, NumberInput, SegmentedControl, Select, SelectProps } from "@mantine/core";
+import { Avatar, Box, Group, NumberInput, SegmentedControl, Select, SelectProps } from "@mantine/core";
 import { keyBy } from "lodash";
 import { useMemo } from "react";
 import { GameLogs, NFLPosition } from "./GameLogs";
@@ -70,7 +70,9 @@ export function ParlayLeg({ homeTeam, awayTeam, playerId, overUnder, stat, statV
 
   return (
     <Group>
-      <Avatar src={player?.picture} size="sm" />
+      <Box bg="gray" style={{ borderRadius: 100 }}>
+        <Avatar src={player?.picture} size="md" />
+      </Box>
       <Select
         searchable
         selectFirstOptionOnChange
@@ -102,6 +104,7 @@ export function ParlayLeg({ homeTeam, awayTeam, playerId, overUnder, stat, statV
           { value: "over", label: "Over" },
           { value: "under", label: "Under" }
         ]}
+        color="blue"
         orientation="vertical"
         value={overUnder}
         onChange={val => updateParlayLeg({ overUnder: val as "over" | "under" })}
@@ -111,6 +114,8 @@ export function ParlayLeg({ homeTeam, awayTeam, playerId, overUnder, stat, statV
         min={0.5}
         max={999.5}
         decimalScale={1}
+        stepHoldDelay={500}
+        stepHoldInterval={t => Math.max(1000 / t ** 2, 25)}
         placeholder="Value"
         value={statValue}
         onChange={val => updateParlayLeg({ statValue: val as number })}

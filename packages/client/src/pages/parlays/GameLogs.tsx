@@ -39,7 +39,7 @@ export function GameLogs({ playerId, playerTeamId, stat, overUnder, statValue, p
 
   return (
     <>
-      <HoverCard shadow="md">
+      <HoverCard shadow="md" position="top">
         <div>
           <Text>
             Hit{" "}
@@ -63,7 +63,7 @@ export function GameLogs({ playerId, playerTeamId, stat, overUnder, statValue, p
             </Card>
           )}
         </div>
-        <HoverCard.Dropdown visibleFrom="lg">
+        <HoverCard.Dropdown>
           <GameLogsTable logs={gameLogs} position={position} stat={stat} />
         </HoverCard.Dropdown>
       </HoverCard>

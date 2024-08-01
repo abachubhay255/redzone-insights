@@ -12,9 +12,9 @@ type Props = {
 };
 
 export function GameLogsTable({ logs, position, stat }: Props) {
-  const isRusher = isNFLRusher(position ?? "RB");
-  const isPasser = isNFLPasser(position ?? "QB");
-  const isReceiver = isNFLReceiver(position ?? "WR");
+  // const isRusher = isNFLRusher(position ?? "RB");
+  // const isPasser = isNFLPasser(position ?? "QB");
+  // const isReceiver = isNFLReceiver(position ?? "WR");
 
   const [statCategory, statName] = stat.split(".");
 
@@ -27,7 +27,7 @@ export function GameLogsTable({ logs, position, stat }: Props) {
         {log.teamKey} {log.isHome ? "vs" : "@"} {log.oppKey}
       </Table.Td>
       <Table.Td c="blue">{log[statCategory as keyof PlayerGameLogs]?.[statName]}</Table.Td>
-      {isPasser && (
+      {/* {isPasser && (
         <>
           <Table.Td>{log.passing?.yards ?? 0}</Table.Td>
           <Table.Td>{log.passing?.touchdowns ?? 0}</Table.Td>
@@ -44,7 +44,7 @@ export function GameLogsTable({ logs, position, stat }: Props) {
           <Table.Td>{log.receiving?.yards ?? 0}</Table.Td>
           <Table.Td>{log.receiving?.touchdowns ?? 0}</Table.Td>
         </>
-      )}
+      )} */}
     </Table.Tr>
   ));
 
@@ -55,7 +55,7 @@ export function GameLogsTable({ logs, position, stat }: Props) {
           <Table.Th>Date</Table.Th>
           <Table.Th>Matchup</Table.Th>
           <Table.Th c="blue">{statDisplayName}</Table.Th>
-          {isPasser && (
+          {/* {isPasser && (
             <>
               <Table.Th>Passing Yards</Table.Th>
               <Table.Th>Passing TDs</Table.Th>
@@ -72,7 +72,7 @@ export function GameLogsTable({ logs, position, stat }: Props) {
               <Table.Th>Receiving Yards</Table.Th>
               <Table.Th>Receiving TDs</Table.Th>
             </>
-          )}
+          )} */}
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>{rows}</Table.Tbody>

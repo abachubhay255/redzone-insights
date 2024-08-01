@@ -1,7 +1,7 @@
 import { AppLoader } from "#s/components/AppLoader";
 import { GetTeamsWithStatsDocument, GetTeamsWithStatsQuery } from "#s/graphql/types-and-documents";
 import { useGraphQL } from "#s/graphql/useGraphQL";
-import { Group, SegmentedControl, Stack, Switch } from "@mantine/core";
+import { Group, SegmentedControl, Stack, Switch, Text } from "@mantine/core";
 import { keyBy } from "lodash";
 import { useMemo, useState } from "react";
 import { StandingsTable } from "./StandingsTable";
@@ -75,7 +75,15 @@ export function Standings() {
           w={200}
           color="gray"
         />
-        <Switch label="More Stats" checked={showMoreStats} onChange={e => setShowMoreStats(e.currentTarget.checked)} />
+        <Switch
+          label={
+            <Text size="sm" fw={500}>
+              More Stats
+            </Text>
+          }
+          checked={showMoreStats}
+          onChange={e => setShowMoreStats(e.currentTarget.checked)}
+        />
       </Group>
 
       {tables.map(({ title, table }) => (

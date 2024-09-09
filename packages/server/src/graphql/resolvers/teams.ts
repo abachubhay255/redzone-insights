@@ -8,6 +8,7 @@ export async function teams() {
   const partialTeams = teamsData.map((team: any) => {
     const gamesPlayed = toNum(team.wins) + toNum(team.loss) + toNum(team.tie);
     const games = gamesPlayed || 1;
+    if (!team || typeof team !== "object") throw new Error("Invalid team data");
     return {
       id: team.teamID,
       city: team.teamCity,
@@ -21,18 +22,18 @@ export async function teams() {
       wins: toNum(team.wins),
       losses: toNum(team.loss),
       ties: toNum(team.tie),
-      streak: team.currentStreak?.result + team.currentStreak.length,
+      streak: (team.currentStreak?.result ?? "") + (team.currentStreak?.length ?? ""),
       pointsFor: round(toNum(team.pf) / games),
       pointsAgainst: round(toNum(team.pa) / games),
       statsPerGame: {
-        rushYards: round(toNum(team.teamStats.Rushing.rushYds) / games),
-        rushTds: round(toNum(team.teamStats.Rushing.rushTD) / games),
-        passYards: round(toNum(team.teamStats.Passing.passYds) / games),
-        passTds: round(toNum(team.teamStats.Passing.passTD) / games),
-        allowedRushYards: round(toNum(team.teamStats.Defense.rushingYardsAllowed) / games),
-        allowedRushTds: round(toNum(team.teamStats.Defense.rushingTDAllowed) / games),
-        allowedPassYards: round(toNum(team.teamStats.Defense.passingYardsAllowed) / games),
-        allowedPassTds: round(toNum(team.teamStats.Defense.passingTDAllowed) / games)
+        rushYards: round(toNum(team.teamStats?.Rushing?.rushYds) / games),
+        rushTds: round(toNum(team.teamStats?.Rushing?.rushTD) / games),
+        passYards: round(toNum(team.teamStats?.Passing?.passYds) / games),
+        passTds: round(toNum(team.teamStats?.Passing?.passTD) / games),
+        allowedRushYards: round(toNum(team.teamStats?.Defense?.rushingYardsAllowed) / games),
+        allowedRushTds: round(toNum(team.teamStats?.Defense?.rushingTDAllowed) / games),
+        allowedPassYards: round(toNum(team.teamStats?.Defense?.passingYardsAllowed) / games),
+        allowedPassTds: round(toNum(team.teamStats?.Defense?.passingTDAllowed) / games)
       }
     };
   });
